@@ -1,7 +1,7 @@
 name: scaled_app
 description: Scale your UI design altogether without hassle
 version: 0.1.0
-homepage:
+homepage: https://github.com/LastMonopoly/scaled_app
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
