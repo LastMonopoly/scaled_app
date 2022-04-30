@@ -5,9 +5,13 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 
+// void main() => runApp(const MyApp());
+
 void main() {
-  // runApp(MyApp());
-  runAppScaled(const MyApp(), baseWidth: 375); // Hot Restart after changing baseWidth
+  // baseWidth is the screen width used for your UI design
+  // it could be 360, 375, 390, 414, etc.
+  // works for portrait mode & landscape mode
+  runAppScaled(const MyApp(), baseWidth: 375, fromWidth: 400);
 }
 
 class MyApp extends StatelessWidget {
@@ -69,7 +73,6 @@ class TestCase extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
 
     return ListView(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
