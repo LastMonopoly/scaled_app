@@ -4,9 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-void runAppScaled(Widget app, {required double baseWidth, double? toWidth, double? fromWidth}) {
+void runAppScaled(Widget app, {double? baseWidth, double? fromWidth, double? toWidth}) {
   ScaledWidgetsFlutterBinding.ensureInitialized(
-      baseWidth: baseWidth, toWidth: toWidth, fromWidth: fromWidth)
+      baseWidth: baseWidth ?? -1, fromWidth: fromWidth, toWidth: toWidth)
     ..attachRootWidget(app)
     ..scheduleWarmUpFrame();
 }
@@ -16,21 +16,21 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   final double toWidth;
   final double fromWidth;
 
-  ScaledWidgetsFlutterBinding(this.baseWidth, this.toWidth, this.fromWidth);
+  ScaledWidgetsFlutterBinding(this.baseWidth, this.fromWidth, this.toWidth);
 
   static WidgetsBinding ensureInitialized(
-      {required double baseWidth, double? toWidth, double? fromWidth}) {
-    double _toWidth = toWidth ?? -double.infinity;
-    double _fromWidth = fromWidth ?? double.infinity;
+      {required double baseWidth, double? fromWidth, double? toWidth}) {
+    double _fromWidth = fromWidth ?? -double.infinity;
+    double _toWidth = toWidth ?? double.infinity;
 
-    assert(_toWidth < _fromWidth);
+    assert(_fromWidth < _toWidth);
     if (WidgetsBinding.instance == null) {
-      ScaledWidgetsFlutterBinding(baseWidth, _toWidth, _fromWidth);
+      ScaledWidgetsFlutterBinding(baseWidth, _fromWidth, _toWidth);
     }
     return WidgetsBinding.instance!;
   }
 
-  bool get _inRange => baseWidth >= toWidth && baseWidth <= fromWidth;
+  bool get _inRange => baseWidth > 0 && baseWidth >= fromWidth && baseWidth <= toWidth;
 
   @override
   void initInstances() {
