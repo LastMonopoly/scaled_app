@@ -1,14 +1,20 @@
-import 'dart:collection';
+import 'dart:async' show scheduleMicrotask, Timer;
+import 'dart:collection' show Queue;
 import 'dart:ui' show PointerDataPacket;
-import 'package:flutter/rendering.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart' show ViewConfiguration;
+import 'package:flutter/gestures.dart' show PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
 void runAppScaled(Widget app, {double? baseWidth, double? fromWidth, double? toWidth}) {
-  ScaledWidgetsFlutterBinding.ensureInitialized(
-      baseWidth: baseWidth ?? -1, fromWidth: fromWidth, toWidth: toWidth)
-    ..attachRootWidget(app)
-    ..scheduleWarmUpFrame();
+  WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
+    baseWidth: baseWidth ?? -1,
+    fromWidth: fromWidth,
+    toWidth: toWidth,
+  );
+  Timer.run(() {
+    binding.attachRootWidget(app);
+  });
+  binding.scheduleWarmUpFrame();
 }
 
 class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
@@ -33,12 +39,6 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   bool get _inRange => baseWidth > 0 && baseWidth >= fromWidth && baseWidth <= toWidth;
 
   @override
-  void initInstances() {
-    super.initInstances();
-    window.onPointerDataPacket = _handlePointerDataPacket;
-  }
-
-  @override
   ViewConfiguration createViewConfiguration() {
     if (_inRange) {
       return ViewConfiguration(
@@ -52,12 +52,30 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   final Queue<PointerEvent> _pendingPointerEvents = Queue<PointerEvent>();
 
+  @override
+  void initInstances() {
+    super.initInstances();
+    window.onPointerDataPacket = _handlePointerDataPacket;
+  }
+
   void _handlePointerDataPacket(PointerDataPacket packet) {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
     _pendingPointerEvents.addAll(PointerEventConverter.expand(
         packet.data, _inRange ? window.physicalSize.width / baseWidth : window.devicePixelRatio));
     if (!locked) _flushPointerEventQueue();
+  }
+
+  /// Dispatch a [PointerCancelEvent] for the given pointer soon.
+  ///
+  /// The pointer event will be dispatched before the next pointer event and
+  /// before the end of the microtask but not within this function call.
+  @override
+  void cancelPointer(int pointer) {
+    if (_pendingPointerEvents.isEmpty && !locked) {
+      scheduleMicrotask(_flushPointerEventQueue);
+    }
+    _pendingPointerEvents.addFirst(PointerCancelEvent(pointer: pointer));
   }
 
   void _flushPointerEventQueue() {
