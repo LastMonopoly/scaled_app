@@ -58,8 +58,11 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     return WidgetsBinding.instance!;
   }
 
-  bool get _inRange =>
-      baseWidth > 0 && baseWidth >= fromWidth && baseWidth <= toWidth;
+  bool get _inRange {
+    if (baseWidth < 0) return false;
+    double deviceWidth = window.physicalSize.width / window.devicePixelRatio;
+    return deviceWidth >= fromWidth && deviceWidth <= toWidth;
+  }
 
   /// Override the method from [RendererBinding.createViewConfiguration] to
   /// change what size or device pixel ratio the [RenderView] will use.
@@ -71,12 +74,10 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   @override
   ViewConfiguration createViewConfiguration() {
     if (_inRange) {
+      double devicePixelRatio = window.physicalSize.width / baseWidth;
       return ViewConfiguration(
-        size: Size(
-            baseWidth,
-            window.physicalSize.height /
-                (window.physicalSize.width / baseWidth)),
-        devicePixelRatio: window.physicalSize.width / baseWidth,
+        size: Size(baseWidth, window.physicalSize.height / devicePixelRatio),
+        devicePixelRatio: devicePixelRatio,
       );
     } else {
       return super.createViewConfiguration();
