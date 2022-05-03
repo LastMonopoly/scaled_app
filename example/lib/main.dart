@@ -9,10 +9,14 @@ import 'package:scaled_app/scaled_app.dart';
 
 void main() {
   // 1st way to use this package
-  runAppScaled(const MyApp(), baseWidth: 375, toWidth: 400);
+  runAppScaled(const MyApp(), baseWidth: 375);
 
   // 2nd way to use this package
-  // ScaledWidgetsFlutterBinding.ensureInitialized(baseWidth: 375, fromWidth: 300);
+  // ScaledWidgetsFlutterBinding.ensureInitialized(
+  //   baseWidth: 375,
+  //   fromWidth: 300,
+  //   toWidth: 400,
+  // );
   // runAppScaled(const MyApp());
 }
 
