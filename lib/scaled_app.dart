@@ -5,7 +5,14 @@ import 'package:flutter/rendering.dart' show ViewConfiguration;
 import 'package:flutter/gestures.dart' show PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
-void runAppScaled(Widget app, {double? baseWidth, double? fromWidth, double? toWidth}) {
+/// Replace [runApp] with [runAppScaled] in `main()`.
+///
+/// [baseWidth] is screen width used in your UI design.
+///
+/// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
+///
+void runAppScaled(Widget app,
+    {double? baseWidth, double? fromWidth, double? toWidth}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: baseWidth ?? -1,
     fromWidth: fromWidth,
@@ -17,6 +24,11 @@ void runAppScaled(Widget app, {double? baseWidth, double? fromWidth, double? toW
   binding.scheduleWarmUpFrame();
 }
 
+/// A concrete binding for applications based on the Widgets framework.
+///
+/// This is the glue that binds the framework to the Flutter engine.
+///
+/// Inherit from [WidgetsFlutterBinding].
 class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   final double baseWidth;
   final double toWidth;
@@ -24,6 +36,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   ScaledWidgetsFlutterBinding(this.baseWidth, this.fromWidth, this.toWidth);
 
+  /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
+  ///
+  /// [baseWidth] is screen width used in your UI design.
+  ///
+  /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
+  ///
   static WidgetsBinding ensureInitialized(
       {required double baseWidth, double? fromWidth, double? toWidth}) {
     double _fromWidth = fromWidth ?? -double.infinity;
@@ -36,13 +54,24 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     return WidgetsBinding.instance!;
   }
 
-  bool get _inRange => baseWidth > 0 && baseWidth >= fromWidth && baseWidth <= toWidth;
+  bool get _inRange =>
+      baseWidth > 0 && baseWidth >= fromWidth && baseWidth <= toWidth;
 
+  /// Override the method from [RendererBinding.createViewConfiguration] to
+  /// change what size or device pixel ratio the [RenderView] will use.
+  ///
+  /// See more:
+  ///
+  /// * [RendererBinding.createViewConfiguration]
+  /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
     if (_inRange) {
       return ViewConfiguration(
-        size: Size(baseWidth, window.physicalSize.height / (window.physicalSize.width / baseWidth)),
+        size: Size(
+            baseWidth,
+            window.physicalSize.height /
+                (window.physicalSize.width / baseWidth)),
         devicePixelRatio: window.physicalSize.width / baseWidth,
       );
     } else {
@@ -52,17 +81,32 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   final Queue<PointerEvent> _pendingPointerEvents = Queue<PointerEvent>();
 
+  /// Adapted from [GestureBinding.initInstances]
   @override
   void initInstances() {
     super.initInstances();
     window.onPointerDataPacket = _handlePointerDataPacket;
   }
 
+  @override
+  void unlocked() {
+    super.unlocked();
+    _flushPointerEventQueue();
+  }
+
+  /// When we scale UI using [ViewConfiguration], [ui.window] remains unchanged.
+  ///
+  /// [GestureBinding] uses [window.devicePixelRatio] to do calculations,
+  /// so we override corresponding methods.
   void _handlePointerDataPacket(PointerDataPacket packet) {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
     _pendingPointerEvents.addAll(PointerEventConverter.expand(
-        packet.data, _inRange ? window.physicalSize.width / baseWidth : window.devicePixelRatio));
+      packet.data,
+      _inRange
+          ? window.physicalSize.width / baseWidth
+          : window.devicePixelRatio,
+    ));
     if (!locked) _flushPointerEventQueue();
   }
 
