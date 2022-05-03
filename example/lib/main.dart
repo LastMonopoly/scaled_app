@@ -8,15 +8,11 @@ import 'package:scaled_app/scaled_app.dart';
 // void main() => runApp(const MyApp());
 
 void main() {
-  // baseWidth is the screen width used for your UI design
-  // it could be 360, 375, 390, 414, etc.
-  // works for portrait mode & landscape mode
-
   // 1st way to use this package
   runAppScaled(const MyApp(), baseWidth: 375, toWidth: 400);
 
   // 2nd way to use this package
-  // ScaledWidgetsFlutterBinding.ensureInitialized(baseWidth: 375, toWidth: 400);
+  // ScaledWidgetsFlutterBinding.ensureInitialized(baseWidth: 375, fromWidth: 300);
   // runAppScaled(const MyApp());
 }
 

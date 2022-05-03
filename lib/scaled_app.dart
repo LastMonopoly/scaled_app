@@ -9,6 +9,8 @@ import 'package:flutter/widgets.dart';
 ///
 /// [baseWidth] is screen width used in your UI design.
 ///
+/// It could be 360, 375, 414, etc, works for portrait & landscape mode.
+///
 /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
 ///
 void runAppScaled(Widget app,
@@ -39,6 +41,8 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
   /// [baseWidth] is screen width used in your UI design.
+  ///
+  /// It could be 360, 375, 414, etc, works for portrait & landscape mode.
   ///
   /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
   ///
