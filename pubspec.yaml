@@ -1,6 +1,6 @@
 name: scaled_app
-description: Scale the entire UI design without hassle.
-version: 0.1.0
+description: Scale the entire UI design without hassle, useful when the UI design is fixed-width.
+version: 0.1.1
 homepage: https://github.com/LastMonopoly/scaled_app
 
 environment:

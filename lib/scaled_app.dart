@@ -30,9 +30,14 @@ void runAppScaled(Widget app,
 ///
 /// Inherit from [WidgetsFlutterBinding].
 class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
+  /// Screen width used in your UI design
   final double baseWidth;
-  final double toWidth;
+
+  /// Minimum screen width used for scaling
   final double fromWidth;
+
+  /// Maximum screen width used for scaling
+  final double toWidth;
 
   ScaledWidgetsFlutterBinding(this.baseWidth, this.fromWidth, this.toWidth);
 
