@@ -35,24 +35,53 @@ After
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Use this package in your Flutter app when:
 
-## Getting started
+- the UI design is fixed on one screen width
+- you want to scale the entire UI, not just part of it
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## Getting Started
+
+In the `pubspec.yaml` of your flutter project, add the following dependency:
+
+```yaml
+dependencies:
+  ...
+  scaled_app: ^0.1.0
+```
+
+Import it:
+
+```dart
+import 'package:scaled_app/scaled_app.dart';
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+Replace `runApp` with `runAppScaled`
 ```dart
-const like = 'sample';
+void main() {
+  // 1st way to use this package
+  // baseWidth is the screen width used for your UI design
+  runAppScaled(const MyApp(), baseWidth: 375);
+}
+```
+Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
+```dart
+void main() {
+  // 2nd way to use this package
+  // Scaling will be applied to screen width from [fromWidth] to [toWidth].
+  ScaledWidgetsFlutterBinding.ensureInitialized(
+    baseWidth: 375,
+    fromWidth: 300,
+    toWidth: 400,
+  );
+  runAppScaled(const MyApp());
+}
 ```
 
-## Additional information
+<!-- ## Additional information
 
 TODO: Tell users more about the package: where to find more information, how to 
 contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+from the package authors, and more. -->
