@@ -17,12 +17,12 @@ Button, image, font, everything is scaled automatically.
 
 Design for one screen size, scale for all the others.
 
-Before
+Before:
 - 250x250 square is the same size across devices
 
 ![Screenshots of the same design before scaling](https://github.com/LastMonopoly/scaled_app/blob/master/doc/Before.png "Screenshots before scaling")
   
-After
+After:
 - 250x250 square has two thirds the screen width across devices
 
 ![Screenshots of the same design after scaling](https://github.com/LastMonopoly/scaled_app/blob/master/doc/After.png "Screenshots after scaling")
@@ -37,7 +37,7 @@ After
 
 Use this package in your Flutter app when:
 
-- the UI design is fixed on one screen width
+- your UI design is fixed on one screen width
 - you want to scale the entire UI, not just part of it
 
 ## Getting Started
