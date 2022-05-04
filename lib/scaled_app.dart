@@ -7,9 +7,7 @@ import 'package:flutter/widgets.dart';
 
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
-/// [baseWidth] is screen width used in your UI design.
-///
-/// It could be 360, 375, 414, etc, works for portrait & landscape mode.
+/// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
 ///
 /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
 ///
@@ -40,9 +38,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
-  /// [baseWidth] is screen width used in your UI design.
-  ///
-  /// It could be 360, 375, 414, etc, works for portrait & landscape mode.
+  /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
   ///
   /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
   ///
@@ -99,7 +95,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     _flushPointerEventQueue();
   }
 
-  /// When we scale UI using [ViewConfiguration], [ui.window] remains unchanged.
+  /// When we scale UI using [ViewConfiguration], [ui.window] stays the same.
   ///
   /// [GestureBinding] uses [window.devicePixelRatio] to do calculations,
   /// so we override corresponding methods.

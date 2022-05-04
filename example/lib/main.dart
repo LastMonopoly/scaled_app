@@ -76,7 +76,7 @@ class TestCase extends StatelessWidget {
     // Huawei: Size(360.0, 800.0), devicePixelRatio: 3.0, w: 1080
     // Apple: Size(375.0, 667.0), devicePixelRatio: 2.0, w: 750
     // Pixel4: Size(411.4, 820.6), devicePixelRatio: 3.5, w: 1440
-    MediaQueryData mediaQuery = MediaQuery.of(context);
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     return ListView(
       children: [
@@ -114,8 +114,8 @@ class TestCase extends StatelessWidget {
           ),
         ),
         Text(
-          'mediaQuery screen size is ${mediaQuery.size.width.toStringAsFixed(0)} x ${mediaQuery.size.height.toStringAsFixed(0)}\n'
-          'mediaQuery devicePixelRatio is ${mediaQuery.devicePixelRatio}\n'
+          'mediaQuery screen size is ${mediaQueryData.size.width.toStringAsFixed(0)} x ${mediaQueryData.size.height.toStringAsFixed(0)}\n'
+          'mediaQuery devicePixelRatio is ${mediaQueryData.devicePixelRatio}\n'
           'mediaQuery data stays the same \n',
         ),
       ],
