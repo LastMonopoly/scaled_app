@@ -17,8 +17,6 @@ Button, image, font, everything is scaled automatically.
 
 Design for one screen size, scale for all the others.
 
-Works for portrait and landscape mode.
-
 Before:
 - 250x250 square is the same size across devices
 
@@ -30,7 +28,7 @@ After:
 ![Screenshots of the same design after scaling](https://github.com/LastMonopoly/scaled_app/blob/master/doc/After.png "Screenshots after scaling")
 
 - if we resize the screenshots above to be the same width
-- then everything appears the same size below
+- then everything appears the same size (see below)
 
 ![Resized screenshots of the same design after scaling](https://github.com/LastMonopoly/scaled_app/blob/master/doc/After_2.png "Resized screenshots after scaling")
 
