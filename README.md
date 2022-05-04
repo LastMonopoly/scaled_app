@@ -11,8 +11,27 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Scale your entire UI design without hassle.
+
+Button, image, font, everything is scaled automatically.
+
+Design for one screen size, scale for all the others.
+
+Before
+- 250x250 square is the same size across devices
+
+![Screenshots of the same design before scaling](/doc/Before.png "Screenshots before scaling")
+  
+After
+- 250x250 square has two thirds the screen width across devices
+
+![Screenshots of the same design after scaling](/doc/After.png "Screenshots after scaling")
+
+- If we resize the screenshots above to be the same width
+- then everything appears the same size
+
+![Resized screenshots of the same design after scaling](/doc/After_2.png "Resized screenshots after scaling")
+
 
 ## Features
 
