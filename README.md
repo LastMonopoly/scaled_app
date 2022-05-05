@@ -40,7 +40,7 @@ Use this package in your Flutter app when:
 - the UI design is fixed-width
 - you want to scale the entire UI, not just part of it
 
-## Getting Started
+<!-- ## Getting Started
 
 In the `pubspec.yaml` of your flutter project, add the following dependency:
 
@@ -54,7 +54,7 @@ Import it:
 
 ```dart
 import 'package:scaled_app/scaled_app.dart';
-```
+``` -->
 
 ## Usage
 
