@@ -15,8 +15,6 @@ Scale the entire UI design proportionally.
 
 Button, image, font, everything is scaled automatically.
 
-Replace `runApp` with `runAppScaled`, the work is done.
-
 Before:
 - 250x250 square is the same size across devices
 
@@ -47,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.1.1
+  scaled_app: ^0.1.1+1
 ```
 
 Import it:
