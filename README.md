@@ -11,7 +11,7 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-Scale the entire UI design without hassle.
+Scale the entire UI design proportionally.
 
 Button, image, font, everything is scaled automatically.
 
