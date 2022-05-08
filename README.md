@@ -15,7 +15,7 @@ Scale the entire UI design proportionally.
 
 Button, image, font, everything is scaled automatically.
 
-Design for one screen size, scale for all the others.
+Replace `runApp` with `runAppScaled`, and the work is done.
 
 Before:
 - 250x250 square is the same size across devices
@@ -40,21 +40,21 @@ Use this package in your Flutter app when:
 - the UI design is fixed-width
 - you want to scale the entire UI, not just part of it
 
-<!-- ## Getting Started
+## Getting Started
 
 In the `pubspec.yaml` of your flutter project, add the following dependency:
 
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.1.0
+  scaled_app: ^0.1.1
 ```
 
 Import it:
 
 ```dart
 import 'package:scaled_app/scaled_app.dart';
-``` -->
+```
 
 ## Usage
 
