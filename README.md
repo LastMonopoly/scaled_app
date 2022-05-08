@@ -15,7 +15,7 @@ Scale the entire UI design proportionally.
 
 Button, image, font, everything is scaled automatically.
 
-Replace `runApp` with `runAppScaled`, and the work is done.
+Replace `runApp` with `runAppScaled`, the work is done.
 
 Before:
 - 250x250 square is the same size across devices
