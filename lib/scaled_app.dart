@@ -10,13 +10,27 @@ import 'package:flutter/widgets.dart';
 /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
 ///
 /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
+/// 
+/// It's also possible to scale by height ratio, just replace `Width` with `Height`.
+/// Note that the scaling can only be **either** width or height ratio. You can't supply
+/// both `*Width` & `*Height` parameters.
 ///
-void runAppScaled(Widget app,
-    {double? baseWidth, double? fromWidth, double? toWidth}) {
+void runAppScaled(
+  Widget app, {
+  double? baseWidth,
+  double? fromWidth,
+  double? toWidth,
+  double? baseHeight,
+  double? fromHeight,
+  double? toHeight,
+}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: baseWidth ?? -1,
     fromWidth: fromWidth,
     toWidth: toWidth,
+    baseHeight: baseHeight ?? -1,
+    fromHeight: fromHeight,
+    toHeight: toHeight,
   );
   Timer.run(() {
     binding.attachRootWidget(app);
@@ -39,7 +53,23 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// Maximum screen width used for scaling
   final double toWidth;
 
-  ScaledWidgetsFlutterBinding(this.baseWidth, this.fromWidth, this.toWidth);
+  /// Screen height used in your UI design
+  final double baseHeight;
+
+  /// Minimum screen height used for scaling
+  final double fromHeight;
+
+  /// Maximum screen height used for scaling
+  final double toHeight;
+
+  ScaledWidgetsFlutterBinding(
+    this.baseWidth,
+    this.fromWidth,
+    this.toWidth,
+    this.baseHeight,
+    this.fromHeight,
+    this.toHeight,
+  );
 
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
@@ -47,22 +77,50 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   ///
   /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
   ///
-  static WidgetsBinding ensureInitialized(
-      {required double baseWidth, double? fromWidth, double? toWidth}) {
+  /// It's also possible to scale by height ratio, just replace `Width` with `Height`.
+  /// Note that the scaling can only be **either** width or height ratio. You can't supply
+  /// both `*Width` & `*Height` parameters.
+  ///
+  static WidgetsBinding ensureInitialized({
+    required double baseWidth,
+    double? fromWidth,
+    double? toWidth,
+    required double baseHeight,
+    double? fromHeight,
+    double? toHeight,
+  }) {
     double _fromWidth = fromWidth ?? -double.infinity;
     double _toWidth = toWidth ?? double.infinity;
+    double _fromHeight = fromHeight ?? -double.infinity;
+    double _toHeight = toHeight ?? double.infinity;
 
-    assert(_fromWidth < _toWidth);
+    assert(_fromWidth < _toWidth && _fromHeight < _toHeight);
     if (WidgetsBinding.instance == null) {
-      ScaledWidgetsFlutterBinding(baseWidth, _fromWidth, _toWidth);
+      ScaledWidgetsFlutterBinding(
+        baseWidth,
+        _fromWidth,
+        _toWidth,
+        baseHeight,
+        _fromHeight,
+        _toHeight,
+      );
     }
     return WidgetsBinding.instance!;
   }
 
+  bool get _isUsingWidth => baseWidth >= 0 && baseHeight < 0;
+
   bool get _inRange {
-    if (baseWidth < 0) return false;
-    double deviceWidth = window.physicalSize.width / window.devicePixelRatio;
-    return deviceWidth >= fromWidth && deviceWidth <= toWidth;
+    if (baseWidth < 0 && baseHeight < 0) return false;
+    if (baseWidth >= 0 && baseHeight >= 0) return false;
+    if (_isUsingWidth) {
+      double deviceWidth = window.physicalSize.width / window.devicePixelRatio;
+      return deviceWidth >= fromWidth && deviceWidth <= toWidth;
+    } else {
+      double deviceHeight =
+          window.physicalSize.height / window.devicePixelRatio;
+      return deviceHeight >= fromHeight && deviceHeight <= toHeight;
+    }
   }
 
   /// Override the method from [RendererBinding.createViewConfiguration] to
@@ -75,9 +133,13 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   @override
   ViewConfiguration createViewConfiguration() {
     if (_inRange) {
-      double devicePixelRatio = window.physicalSize.width / baseWidth;
+      double devicePixelRatio = _isUsingWidth
+          ? window.physicalSize.width / baseWidth
+          : window.physicalSize.height / baseHeight;
       return ViewConfiguration(
-        size: Size(baseWidth, window.physicalSize.height / devicePixelRatio),
+        size: _isUsingWidth
+            ? Size(baseWidth, window.physicalSize.height / devicePixelRatio)
+            : Size(window.physicalSize.width / devicePixelRatio, baseHeight),
         devicePixelRatio: devicePixelRatio,
       );
     } else {
@@ -110,7 +172,9 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     _pendingPointerEvents.addAll(PointerEventConverter.expand(
       packet.data,
       _inRange
-          ? window.physicalSize.width / baseWidth
+          ? _isUsingWidth
+              ? window.physicalSize.width / baseWidth
+              : window.physicalSize.height / baseHeight
           : window.devicePixelRatio,
     ));
     if (!locked) _flushPointerEventQueue();
