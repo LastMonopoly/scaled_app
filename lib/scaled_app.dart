@@ -49,14 +49,16 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   ///
   static WidgetsBinding ensureInitialized(
       {required double baseWidth, double? fromWidth, double? toWidth}) {
-    double _fromWidth = fromWidth ?? -double.infinity;
-    double _toWidth = toWidth ?? double.infinity;
+    double from = fromWidth ?? -double.infinity;
+    double to = toWidth ?? double.infinity;
 
-    assert(_fromWidth < _toWidth);
-    if (WidgetsBinding.instance == null) {
-      ScaledWidgetsFlutterBinding(baseWidth, _fromWidth, _toWidth);
+    assert(from < to);
+    try {
+      return WidgetsBinding.instance;
+    } on FlutterError {
+      ScaledWidgetsFlutterBinding(baseWidth, from, to);
+      return WidgetsBinding.instance;
     }
-    return WidgetsBinding.instance!;
   }
 
   bool get _inRange {
