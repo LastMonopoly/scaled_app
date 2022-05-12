@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Migrate to Flutter 3.0.0
+
 ## 0.1.1+1
 
 * Improve documentation
