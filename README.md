@@ -45,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.1.1+1
+  scaled_app: ^0.1.4
 ```
 
 Import it:

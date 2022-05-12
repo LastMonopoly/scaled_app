@@ -1,6 +1,6 @@
-## 0.1.1+1
+## 0.1.4
 
-* Improve documentation
+* Improve documentation & compatibility
 
 ## 0.1.0
 
