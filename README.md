@@ -45,7 +45,18 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.1.4
+  scaled_app: ^0.1.5
+```
+
+For project using Flutter 3, add the following dependency:
+
+```yaml
+dependencies:
+  ...
+  scaled_app:
+    git:
+      url: https://github.com/LastMonopoly/scaled_app.git
+      ref: master
 ```
 
 Import it:
