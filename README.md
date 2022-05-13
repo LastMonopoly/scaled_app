@@ -45,10 +45,10 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.1.5
+  scaled_app: ^0.1.6
 ```
 
-For projects using Flutter 3, add the following dependency:
+For projects using Flutter 3.0, add the following dependency:
 
 ```yaml
 dependencies:
@@ -79,11 +79,10 @@ Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
 ```dart
 void main() {
   // 2nd way to use this package
-  // Scaling will be applied to screen width from [fromWidth] to [toWidth].
+  // Scaling will be applied when `inRange(deviceWidth)` returns true.
   ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: 375,
-    fromWidth: 300,
-    toWidth: 400,
+    inRange: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   );
   runAppScaled(const MyApp());
 }
