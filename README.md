@@ -48,7 +48,7 @@ dependencies:
   scaled_app: ^0.1.5
 ```
 
-For project using Flutter 3, add the following dependency:
+For projects using Flutter 3, add the following dependency:
 
 ```yaml
 dependencies:
