@@ -26,7 +26,7 @@ After:
 ![Screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/doc/After.png "Screenshots after scaling")
 
 - if we resize the screenshots above to be the same width
-- then everything appears the same size across devices (see below)
+- then everything appears the same size as below
 
 ![Resized screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/doc/After_2.png "Resized screenshots after scaling")
 
