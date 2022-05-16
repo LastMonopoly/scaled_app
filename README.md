@@ -40,7 +40,7 @@ Use this package in your Flutter app when:
 
 ## Getting Started
 
-In the `pubspec.yaml` of your flutter project, add the following dependency:
+For projects using Flutter 2.x.x, add the following dependency:
 
 ```yaml
 dependencies:
