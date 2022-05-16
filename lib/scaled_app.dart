@@ -5,18 +5,18 @@ import 'package:flutter/rendering.dart' show ViewConfiguration;
 import 'package:flutter/gestures.dart' show PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
-typedef RangeChecker = bool Function(double deviceWidth);
+typedef Checker = bool Function(double deviceWidth);
 
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
 /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
 ///
-/// Scaling will be applied when `inRange(deviceWidth)` returns true.
+/// Scaling will be applied when [applyScaling] returns true.
 ///
-void runAppScaled(Widget app, {double? baseWidth, RangeChecker? inRange}) {
+void runAppScaled(Widget app, {double? baseWidth, Checker? applyScaling}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: baseWidth ?? -1,
-    inRange: inRange,
+    applyScaling: applyScaling,
   );
   Timer.run(() {
     binding.attachRootWidget(app);
@@ -34,32 +34,33 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   final double baseWidth;
 
   /// Apply scaling based on device screen width
-  final RangeChecker inRange;
+  final Checker applyScaling;
 
-  ScaledWidgetsFlutterBinding({required this.baseWidth, required this.inRange});
+  ScaledWidgetsFlutterBinding(
+      {required this.baseWidth, required this.applyScaling});
 
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
   /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
   ///
-  /// Scaling will be applied when `inRange(deviceWidth)` returns true.
+  /// Scaling will be applied when [applyScaling] returns true.
   ///
   static WidgetsBinding ensureInitialized({
     required double baseWidth,
-    RangeChecker? inRange,
+    Checker? applyScaling,
   }) {
     if (WidgetsBinding.instance == null) {
       ScaledWidgetsFlutterBinding(
         baseWidth: baseWidth,
-        inRange: inRange ?? (_) => true,
+        applyScaling: applyScaling ?? (_) => true,
       );
     }
     return WidgetsBinding.instance!;
   }
 
-  bool get _inRange {
+  bool get _applyScaling {
     if (baseWidth < 0) return false;
-    return inRange(window.physicalSize.width / window.devicePixelRatio);
+    return applyScaling(window.physicalSize.width / window.devicePixelRatio);
   }
 
   /// Override the method from [RendererBinding.createViewConfiguration] to
@@ -71,7 +72,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
-    if (_inRange) {
+    if (_applyScaling) {
       double devicePixelRatio = window.physicalSize.width / baseWidth;
       return ViewConfiguration(
         size: Size(baseWidth, window.physicalSize.height / devicePixelRatio),
@@ -106,7 +107,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     // defined in a device-independent manner.
     _pendingPointerEvents.addAll(PointerEventConverter.expand(
       packet.data,
-      _inRange
+      _applyScaling
           ? window.physicalSize.width / baseWidth
           : window.devicePixelRatio,
     ));

@@ -14,7 +14,7 @@ void main() {
   // 2nd way to use this package
   // ScaledWidgetsFlutterBinding.ensureInitialized(
   //   baseWidth: 375,
-  //   inRange: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
+  //   applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   // );
   // runAppScaled(const MyApp());
 }

@@ -1,6 +1,6 @@
-## 0.1.7
+## 0.1.8
 
-* Use inRange checker to decide scaling or not
+* Use applyScaling checker to decide scaling or not
 
 ## 0.1.5
 
