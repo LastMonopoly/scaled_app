@@ -12,10 +12,10 @@ void main() {
   runAppScaled(const MyApp(), baseWidth: 375);
 
   // 2nd way to use this package
+  // Scaling will be applied when [applyScaling] returns true
   // ScaledWidgetsFlutterBinding.ensureInitialized(
   //   baseWidth: 375,
-  //   fromWidth: 300,
-  //   toWidth: 400,
+  //   applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   // );
   // runAppScaled(const MyApp());
 }

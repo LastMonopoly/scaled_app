@@ -5,18 +5,18 @@ import 'package:flutter/rendering.dart' show ViewConfiguration;
 import 'package:flutter/gestures.dart' show PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
+typedef Checker = bool Function(double deviceWidth);
+
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
 /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
 ///
-/// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
+/// Scaling will be applied when [applyScaling] returns true.
 ///
-void runAppScaled(Widget app,
-    {double? baseWidth, double? fromWidth, double? toWidth}) {
+void runAppScaled(Widget app, {double? baseWidth, Checker? applyScaling}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: baseWidth ?? -1,
-    fromWidth: fromWidth,
-    toWidth: toWidth,
+    applyScaling: applyScaling,
   );
   Timer.run(() {
     binding.attachRootWidget(app);
@@ -33,38 +33,35 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// Screen width used in your UI design
   final double baseWidth;
 
-  /// Minimum screen width used for scaling
-  final double fromWidth;
+  /// Apply scaling based on device screen width
+  final Checker applyScaling;
 
-  /// Maximum screen width used for scaling
-  final double toWidth;
-
-  ScaledWidgetsFlutterBinding(this.baseWidth, this.fromWidth, this.toWidth);
+  ScaledWidgetsFlutterBinding(
+      {required this.baseWidth, required this.applyScaling});
 
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
   /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
   ///
-  /// Scaling will be applied to devices of screen width from [fromWidth] to [toWidth].
+  /// Scaling will be applied when [applyScaling] returns true.
   ///
-  static WidgetsBinding ensureInitialized(
-      {required double baseWidth, double? fromWidth, double? toWidth}) {
-    double from = fromWidth ?? -double.infinity;
-    double to = toWidth ?? double.infinity;
-
-    assert(from < to);
+  static WidgetsBinding ensureInitialized({
+    required double baseWidth,
+    Checker? applyScaling,
+  }) {
     try {
       return WidgetsBinding.instance;
     } on FlutterError {
-      ScaledWidgetsFlutterBinding(baseWidth, from, to);
-      return WidgetsBinding.instance;
+      return ScaledWidgetsFlutterBinding(
+        baseWidth: baseWidth,
+        applyScaling: applyScaling ?? (_) => true,
+      );
     }
   }
 
-  bool get _inRange {
+  bool get _applyScaling {
     if (baseWidth < 0) return false;
-    double deviceWidth = window.physicalSize.width / window.devicePixelRatio;
-    return deviceWidth >= fromWidth && deviceWidth <= toWidth;
+    return applyScaling(window.physicalSize.width / window.devicePixelRatio);
   }
 
   /// Override the method from [RendererBinding.createViewConfiguration] to
@@ -76,7 +73,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
-    if (_inRange) {
+    if (_applyScaling) {
       double devicePixelRatio = window.physicalSize.width / baseWidth;
       return ViewConfiguration(
         size: Size(baseWidth, window.physicalSize.height / devicePixelRatio),
@@ -111,7 +108,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     // defined in a device-independent manner.
     _pendingPointerEvents.addAll(PointerEventConverter.expand(
       packet.data,
-      _inRange
+      _applyScaling
           ? window.physicalSize.width / baseWidth
           : window.devicePixelRatio,
     ));

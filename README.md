@@ -44,11 +44,19 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 
 ```yaml
 dependencies:
-  ...  
-  scaled_app: # for Flutter 3.0
+  ...
+  scaled_app: ^0.2.0
+```
+
+For projects using Flutter 2.x.x, add the following dependency:
+
+```yaml
+dependencies:
+  ...
+  scaled_app:
     git:
       url: https://github.com/LastMonopoly/scaled_app.git
-      ref: master
+      ref: flutter_2.x.x
 ```
 
 Import it:
@@ -71,11 +79,10 @@ Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
 ```dart
 void main() {
   // 2nd way to use this package
-  // Scaling will be applied to screen width from [fromWidth] to [toWidth].
+  // Scaling will be applied when [applyScaling] returns true
   ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: 375,
-    fromWidth: 300,
-    toWidth: 400,
+    applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   );
   runAppScaled(const MyApp());
 }
