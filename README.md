@@ -79,7 +79,7 @@ Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
 ```dart
 void main() {
   // 2nd way to use this package
-  // Scaling will be applied when [applyScaling] returns true.
+  // Scaling will be applied when [applyScaling] returns true
   ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: 375,
     applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
