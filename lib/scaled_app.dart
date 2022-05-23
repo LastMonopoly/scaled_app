@@ -39,6 +39,8 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   ScaledWidgetsFlutterBinding(
       {required this.baseWidth, required this.applyScaling});
 
+  static WidgetsBinding? _binding;
+
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
   /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
@@ -49,14 +51,11 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     required double baseWidth,
     Checker? applyScaling,
   }) {
-    try {
-      return WidgetsBinding.instance;
-    } on FlutterError {
-      return ScaledWidgetsFlutterBinding(
-        baseWidth: baseWidth,
-        applyScaling: applyScaling ?? (_) => true,
-      );
-    }
+    _binding ??= ScaledWidgetsFlutterBinding(
+      baseWidth: baseWidth,
+      applyScaling: applyScaling ?? (_) => true,
+    );
+    return _binding!;
   }
 
   bool get _applyScaling {
@@ -74,9 +73,9 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   @override
   ViewConfiguration createViewConfiguration() {
     if (_applyScaling) {
-      double devicePixelRatio = window.physicalSize.width / baseWidth;
+      final double devicePixelRatio = window.physicalSize.width / baseWidth;
       return ViewConfiguration(
-        size: Size(baseWidth, window.physicalSize.height / devicePixelRatio),
+        size: window.physicalSize / devicePixelRatio,
         devicePixelRatio: devicePixelRatio,
       );
     } else {
