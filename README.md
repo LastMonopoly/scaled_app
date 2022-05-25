@@ -80,6 +80,10 @@ void main() {
 }
 ```
 
+## Known Issues
+
+This package currently won't work in Android release build.
+
 <!-- ## Additional information
 
 TODO: Tell users more about the package: where to find more information, how to 
