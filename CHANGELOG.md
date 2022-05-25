@@ -1,6 +1,10 @@
+## 0.2.1
+
+* Add Known Issues
+
 ## 0.2.0
 
-* Migrate to Flutter 3.0.0
+* Migrate to Flutter 3.0
 
 ## 0.1.8
 

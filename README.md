@@ -45,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.2.0
+  scaled_app: ^0.2.1
 ```
 
 For projects using Flutter 2.x.x, add the following dependency:
@@ -87,6 +87,10 @@ void main() {
   runAppScaled(const MyApp());
 }
 ```
+
+## Known Issues
+
+This package currently won't work in Android release build.
 
 <!-- ## Additional information
 
