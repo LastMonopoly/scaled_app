@@ -72,7 +72,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
-    if (_applyScaling) {
+    if (!window.physicalSize.isEmpty && _applyScaling) {
       final double devicePixelRatio = window.physicalSize.width / baseWidth;
       return ViewConfiguration(
         size: window.physicalSize / devicePixelRatio,

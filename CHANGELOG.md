@@ -1,6 +1,6 @@
-## 0.2.2
+## 0.2.3
 
-* Update platform support
+* Fix a bug to support Android
 
 ## 0.2.1
 

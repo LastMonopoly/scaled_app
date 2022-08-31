@@ -45,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.2.2
+  scaled_app: ^0.2.3
 ```
 
 For projects using Flutter 2.x.x, add the following dependency:
@@ -88,10 +88,6 @@ void main() {
 }
 ```
 
-## Known Issues
-
-This package currently won't work for Android release build.
-
 ## Additional information
 
-Find more: https://github.com/LastMonopoly/scaled_app
+For more: https://github.com/LastMonopoly/scaled_app
