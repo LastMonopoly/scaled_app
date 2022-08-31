@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Update platform support
+
 ## 0.2.1
 
 * Add Known Issues
