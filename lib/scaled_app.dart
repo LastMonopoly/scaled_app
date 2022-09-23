@@ -7,6 +7,8 @@ import 'package:flutter/widgets.dart';
 
 typedef Checker = bool Function(double deviceWidth);
 
+const double _nullWidth = -1;
+
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
 /// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
@@ -15,7 +17,7 @@ typedef Checker = bool Function(double deviceWidth);
 ///
 void runAppScaled(Widget app, {double? baseWidth, Checker? applyScaling}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
-    baseWidth: baseWidth ?? -1,
+    baseWidth: baseWidth ?? _nullWidth,
     applyScaling: applyScaling,
   );
   Timer.run(() {
@@ -59,7 +61,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   }
 
   bool get _applyScaling {
-    if (baseWidth < 0) return false;
+    if (baseWidth == _nullWidth) return false;
     return applyScaling(window.physicalSize.width / window.devicePixelRatio);
   }
 
@@ -83,8 +85,6 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     }
   }
 
-  final Queue<PointerEvent> _pendingPointerEvents = Queue<PointerEvent>();
-
   /// Adapted from [GestureBinding.initInstances]
   @override
   void initInstances() {
@@ -98,9 +98,11 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     _flushPointerEventQueue();
   }
 
+  final Queue<PointerEvent> _pendingPointerEvents = Queue<PointerEvent>();
+
   /// When we scale UI using [ViewConfiguration], [ui.window] stays the same.
   ///
-  /// [GestureBinding] uses [window.devicePixelRatio] to do calculations,
+  /// [GestureBinding] uses [window.devicePixelRatio] for calculations,
   /// so we override corresponding methods.
   void _handlePointerDataPacket(PointerDataPacket packet) {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
@@ -111,7 +113,9 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
           ? window.physicalSize.width / baseWidth
           : window.devicePixelRatio,
     ));
-    if (!locked) _flushPointerEventQueue();
+    if (!locked) {
+      _flushPointerEventQueue();
+    }
   }
 
   /// Dispatch a [PointerCancelEvent] for the given pointer soon.
@@ -128,6 +132,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   void _flushPointerEventQueue() {
     assert(!locked);
+
     while (_pendingPointerEvents.isNotEmpty) {
       handlePointerEvent(_pendingPointerEvents.removeFirst());
     }
