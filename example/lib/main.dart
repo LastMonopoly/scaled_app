@@ -5,16 +5,16 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 
-// void main() => runApp(const MyApp());
+const double baseWidth = 375;
 
 void main() {
   // 1st way to use this package
-  runAppScaled(const MyApp(), baseWidth: 375);
+  runAppScaled(const MyApp(), baseWidth: baseWidth);
 
   // 2nd way to use this package
   // Scaling will be applied when [applyScaling] returns true
   // ScaledWidgetsFlutterBinding.ensureInitialized(
-  //   baseWidth: 375,
+  //   baseWidth: baseWidth,
   //   applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   // );
   // runAppScaled(const MyApp());
@@ -29,7 +29,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: _title,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.purple, fontFamily: "Roboto"),
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        fontFamily: "Roboto",
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 15)),
+        appBarTheme: const AppBarTheme(centerTitle: false),
+      ),
       home: const MyHomePage(title: _title),
     );
   }
@@ -45,38 +50,43 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaleFactor: 1.1,
-        // devicePixelRatio: 10, // Provide your own value
-        // size: Size(1000, 2000), // Provide your own value
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_note),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return const ScaledMediaQueryDataTest();
+              }));
+            },
+          )
+        ],
       ),
-      child: Scaffold(
-        appBar: AppBar(title: Text(title), centerTitle: false),
-        body: const TestCase(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Pressed!'),
-              duration: Duration(seconds: 1),
-            ));
-          },
-          child: const Icon(Icons.abc),
-        ),
+      body: const ScaledAppLayoutTest(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Tapped ...'),
+            duration: Duration(seconds: 1),
+          ));
+        },
+        child: const Icon(Icons.abc),
       ),
     );
   }
 }
 
-class TestCase extends StatelessWidget {
-  const TestCase({Key? key}) : super(key: key);
+class ScaledAppLayoutTest extends StatelessWidget {
+  const ScaledAppLayoutTest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Huawei: Size(360.0, 800.0), devicePixelRatio: 3.0, w: 1080
     // Apple: Size(375.0, 667.0), devicePixelRatio: 2.0, w: 750
     // Pixel4: Size(411.4, 820.6), devicePixelRatio: 3.5, w: 1440
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    MediaQueryData mediaQuery = MediaQuery.of(context);
 
     return ListView(
       children: [
@@ -114,11 +124,62 @@ class TestCase extends StatelessWidget {
           ),
         ),
         Text(
-          'mediaQuery screen size is ${mediaQueryData.size.width.toStringAsFixed(0)} x ${mediaQueryData.size.height.toStringAsFixed(0)}\n'
-          'mediaQuery devicePixelRatio is ${mediaQueryData.devicePixelRatio}\n'
-          'mediaQuery data stays the same \n',
+          'mediaQuery screen size is ${mediaQuery.size.width.toStringAsFixed(0)} x ${mediaQuery.size.height.toStringAsFixed(0)}\n'
+          'mediaQuery devicePixelRatio is ${mediaQuery.devicePixelRatio}\n'
+          'mediaQuery data stays the same',
         ),
       ],
+    );
+  }
+}
+
+class ScaledMediaQueryDataTest extends StatefulWidget {
+  const ScaledMediaQueryDataTest({Key? key}) : super(key: key);
+
+  @override
+  State<ScaledMediaQueryDataTest> createState() =>
+      _ScaledMediaQueryDataTestState();
+}
+
+class _ScaledMediaQueryDataTestState extends State<ScaledMediaQueryDataTest> {
+  FocusNode focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    focusNode.requestFocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQuery.of(context).scale(baseWidth),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('MediaQueryData.scale'),
+        ),
+        body: Stack(
+          children: [
+            Container(color: Colors.purple.shade50),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+                focusNode: focusNode,
+              ),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if (focusNode.hasFocus) {
+              focusNode.unfocus();
+            } else {
+              focusNode.requestFocus();
+            }
+          },
+          child: const Icon(Icons.keyboard),
+        ),
+      ),
     );
   }
 }

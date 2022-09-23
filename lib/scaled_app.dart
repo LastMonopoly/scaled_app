@@ -138,3 +138,13 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     }
   }
 }
+
+extension ScaledMediaQueryData on MediaQueryData {
+  scale(double baseWidth) {
+    var scale = baseWidth / size.width;
+    return copyWith(
+      devicePixelRatio: devicePixelRatio * scale,
+      viewInsets: viewInsets * scale,
+    );
+  }
+}
