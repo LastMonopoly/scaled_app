@@ -1,17 +1,13 @@
-// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 
 const double baseWidth = 375;
 
 void main() {
-  // 1st way to use this package
+  // 1st way to use runAppScaled
   runAppScaled(const MyApp(), baseWidth: baseWidth);
 
-  // 2nd way to use this package
+  // 2nd way to use runAppScaled
   // Scaling will be applied when [applyScaling] returns true
   // ScaledWidgetsFlutterBinding.ensureInitialized(
   //   baseWidth: baseWidth,
@@ -25,9 +21,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _title = 'Scaled app demo';
+    const title = 'Scaled app demo';
     return MaterialApp(
-      title: _title,
+      title: title,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
@@ -35,141 +31,91 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 15)),
         appBarTheme: const AppBarTheme(centerTitle: false),
       ),
-      home: const MyHomePage(title: _title),
+      home: const MyHomePage(title: title),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   final String title;
-
-  const MyHomePage({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_note),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return const ScaledMediaQueryDataTest();
-              }));
-            },
-          )
-        ],
-      ),
-      body: const ScaledAppLayoutTest(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Tapped ...'),
-            duration: Duration(seconds: 1),
-          ));
-        },
-        child: const Icon(Icons.abc),
-      ),
-    );
-  }
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class ScaledAppLayoutTest extends StatelessWidget {
-  const ScaledAppLayoutTest({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Huawei: Size(360.0, 800.0), devicePixelRatio: 3.0, w: 1080
-    // Apple: Size(375.0, 667.0), devicePixelRatio: 2.0, w: 750
-    // Pixel4: Size(411.4, 820.6), devicePixelRatio: 3.5, w: 1440
-    MediaQueryData mediaQuery = MediaQuery.of(context);
-
-    return ListView(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(color: Colors.purple.shade200),
-              ),
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(color: Colors.purple.shade100),
-              ),
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Container(color: Colors.purple.shade50),
-              ),
-            ),
-          ],
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            color: Colors.purple.shade50,
-            width: 250,
-            child: const AspectRatio(
-              aspectRatio: 1,
-              child: Center(child: Text('250 x 250')),
-            ),
-          ),
-        ),
-        Text(
-          'mediaQuery screen size is ${mediaQuery.size.width.toStringAsFixed(0)} x ${mediaQuery.size.height.toStringAsFixed(0)}\n'
-          'mediaQuery devicePixelRatio is ${mediaQuery.devicePixelRatio}\n'
-          'mediaQuery data stays the same',
-        ),
-      ],
-    );
-  }
-}
-
-class ScaledMediaQueryDataTest extends StatefulWidget {
-  const ScaledMediaQueryDataTest({Key? key}) : super(key: key);
-
-  @override
-  State<ScaledMediaQueryDataTest> createState() =>
-      _ScaledMediaQueryDataTestState();
-}
-
-class _ScaledMediaQueryDataTestState extends State<ScaledMediaQueryDataTest> {
+class _MyHomePageState extends State<MyHomePage> {
   FocusNode focusNode = FocusNode();
-  @override
-  void initState() {
-    super.initState();
-    focusNode.requestFocus();
-  }
+  bool scaleMediaQuery = true;
 
   @override
   Widget build(BuildContext context) {
+    var scaledData = MediaQuery.of(context);
+
+    /// Use mediaQueryData.scale to correctly display keyboard
+    if (scaleMediaQuery) scaledData = scaledData.scale(baseWidth);
+
     return MediaQuery(
-      data: MediaQuery.of(context).scale(baseWidth),
+      data: scaledData,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('MediaQueryData.scale'),
+          title: Text(widget.title),
+          actions: [
+            Switch(
+              value: scaleMediaQuery,
+              activeColor: Colors.purple.shade300,
+              onChanged: (bool toScale) {
+                setState(() {
+                  scaleMediaQuery = toScale;
+                });
+              },
+            )
+          ],
         ),
-        body: Stack(
+        body: ListView(
           children: [
-            Container(color: Colors.purple.shade50),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                focusNode: focusNode,
+            SizedBox(
+              height: 0,
+              child: TextField(focusNode: focusNode),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(color: Colors.purple.shade200),
+                  ),
+                ),
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(color: Colors.purple.shade100),
+                  ),
+                ),
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(color: Colors.purple.shade50),
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                color: Colors.purple.shade50,
+                width: 250,
+                child: const AspectRatio(
+                  aspectRatio: 1,
+                  child: Center(child: Text('250 x 250')),
+                ),
               ),
             ),
+            MediaQueryDataText(scaledData),
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.keyboard),
           onPressed: () {
             if (focusNode.hasFocus) {
               focusNode.unfocus();
@@ -177,9 +123,36 @@ class _ScaledMediaQueryDataTestState extends State<ScaledMediaQueryDataTest> {
               focusNode.requestFocus();
             }
           },
-          child: const Icon(Icons.keyboard),
         ),
       ),
     );
+  }
+}
+
+class MediaQueryDataText extends StatelessWidget {
+  final MediaQueryData data;
+  const MediaQueryDataText(this.data, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'mediaQuery screen size is ${doubleStr(data.size.width)} x ${doubleStr(data.size.height)}\n'
+      'mediaQuery devicePixelRatio is ${doubleStr(data.devicePixelRatio, 1)}\n'
+      'mediaQuery viewInsets is ${paddingStr(data.viewInsets)} \n'
+      'mediaQuery viewPadding is ${paddingStr(data.viewPadding)} \n'
+      'mediaQuery padding is ${paddingStr(data.padding)} \n',
+    );
+  }
+
+  String doubleStr(double d, [int precision = 0]) {
+    return d.toStringAsFixed(precision);
+  }
+
+  String paddingStr(EdgeInsets pad) {
+    var l = doubleStr(pad.left);
+    var r = doubleStr(pad.right);
+    var t = doubleStr(pad.top);
+    var b = doubleStr(pad.bottom);
+    return '($l, $t, $r, $b)';
   }
 }

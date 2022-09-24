@@ -143,8 +143,11 @@ extension ScaledMediaQueryData on MediaQueryData {
   scale(double baseWidth) {
     var scale = baseWidth / size.width;
     return copyWith(
-      devicePixelRatio: devicePixelRatio * scale,
+      size: size * scale,
+      devicePixelRatio: devicePixelRatio / scale,
       viewInsets: viewInsets * scale,
+      viewPadding: viewPadding * scale,
+      padding: padding * scale,
     );
   }
 }
