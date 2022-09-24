@@ -11,7 +11,7 @@ const double _nullWidth = -1;
 
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
-/// [baseWidth] is screen width used in your UI design, it could be 360, 375, 414, etc.
+/// [baseWidth] is screen width used in your UI design, it could be 360, 375, 390, 430, etc.
 ///
 /// Scaling will be applied when [applyScaling] returns true.
 ///

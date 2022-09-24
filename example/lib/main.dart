@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 
+// screen width used in your UI design
 const double baseWidth = 375;
 
 void main() {
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var scaledData = MediaQuery.of(context);
 
-    /// Use mediaQueryData.scale to correctly display keyboard
+    /// use mediaQueryData.scale to properly display keyboard
     if (scaleMediaQuery) scaledData = scaledData.scale(baseWidth);
 
     return MediaQuery(
@@ -135,9 +136,10 @@ class MediaQueryDataText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _data = MediaQuery.of(context);
     return Text(
-      'mediaQuery screen size is ${doubleStr(data.size.width)} x ${doubleStr(data.size.height)}\n'
-      'mediaQuery devicePixelRatio is ${doubleStr(data.devicePixelRatio, 1)}\n'
+      'mediaQuery screen size is ${doubleStr(_data.size.width)} x ${doubleStr(_data.size.height)}\n'
+      'mediaQuery devicePixelRatio is ${doubleStr(_data.devicePixelRatio, 1)}\n'
       'mediaQuery viewInsets is ${paddingStr(data.viewInsets)} \n'
       'mediaQuery viewPadding is ${paddingStr(data.viewPadding)} \n'
       'mediaQuery padding is ${paddingStr(data.padding)} \n',

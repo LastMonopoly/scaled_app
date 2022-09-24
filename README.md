@@ -45,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.2.3
+  scaled_app: ^0.2.4
 ```
 
 For projects using Flutter 2.x.x, add the following dependency:
@@ -71,7 +71,7 @@ Replace `runApp` with `runAppScaled`
 ```dart
 void main() {
   // 1st way to use this package
-  // baseWidth is the screen width used for your UI design
+  // baseWidth is the screen width used in your UI design
   runAppScaled(const MyApp(), baseWidth: 375);
 }
 ```
@@ -85,6 +85,20 @@ void main() {
     applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
   );
   runAppScaled(const MyApp());
+}
+```
+Also, use `MediaQueryData.scale` to properly scale size, viewInsets, viewPadding, etc.
+```dart
+class Route extends StatelessWidget {
+  const Route({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQuery.of(context).scale(baseWidth),
+      child: const Scaffold(...),
+    );
+  }
 }
 ```
 

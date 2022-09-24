@@ -1,6 +1,10 @@
+## 0.2.4
+
+* Add extension for MediaQueryData to scale viewPadding, viewInsets, padding
+  
 ## 0.2.3
 
-* Fix a bug to support Android
+* Fix a bug to support Android release build
 
 ## 0.2.1
 
