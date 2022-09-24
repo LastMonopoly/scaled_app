@@ -87,10 +87,10 @@ void main() {
   runAppScaled(const MyApp());
 }
 ```
-Also, use `MediaQueryData.scale` to properly scale size, viewInsets, viewPadding, etc.
+Use `MediaQueryData.scale` to scale size, viewInsets, viewPadding, etc.
 ```dart
-class Route extends StatelessWidget {
-  const Route({Key? key}) : super(key: key);
+class PageRoute extends StatelessWidget {
+  const PageRoute({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

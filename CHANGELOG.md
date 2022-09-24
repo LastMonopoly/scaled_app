@@ -1,6 +1,6 @@
 ## 0.2.4
 
-* Add extension for MediaQueryData to scale viewPadding, viewInsets, padding
+* Add extension method for MediaQueryData to scale viewPadding, viewInsets, padding, etc.
   
 ## 0.2.3
 
