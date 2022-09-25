@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var scaledData = MediaQuery.of(context);
 
-    /// use mediaQueryData.scale to properly display keyboard
+    // use mediaQueryData.scale to properly display keyboard
     if (scaleMediaQuery) scaledData = scaledData.scale(baseWidth);
 
     return MediaQuery(
@@ -75,8 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: ListView(
           children: [
-            SizedBox(
-              height: 0,
+            Offstage(
               child: TextField(focusNode: focusNode),
             ),
             Row(
