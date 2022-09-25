@@ -45,7 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.2.4
+  scaled_app: ^0.2.5
 ```
 
 For projects using Flutter 2.x.x, add the following dependency:

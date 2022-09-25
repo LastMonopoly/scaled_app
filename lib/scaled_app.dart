@@ -140,7 +140,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 }
 
 extension ScaledMediaQueryData on MediaQueryData {
-  scale(double baseWidth) {
+  MediaQueryData scale(double baseWidth) {
     var scale = baseWidth / size.width;
     return copyWith(
       size: size * scale,
