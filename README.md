@@ -102,6 +102,6 @@ class PageRoute extends StatelessWidget {
 }
 ```
 
-## Additional information
+## Reference
 
-For more: https://github.com/LastMonopoly/scaled_app
+https://juejin.cn/post/7078816723666731021

@@ -1,3 +1,7 @@
+## 0.3.0
+
+* Migrate to Flutter 3.7
+
 ## 0.2.5
 
 * Add extension method for MediaQueryData to scale viewPadding, viewInsets, padding, etc.

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:scaled_app/scaled_app.dart';
+import "package:flutter/material.dart";
+import "package:scaled_app/scaled_app.dart";
 
 // screen width used in your UI design
 const double baseWidth = 375;
@@ -22,14 +22,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Scaled app demo';
+    const title = "Scaled app demo";
     return MaterialApp(
       title: title,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.purple,
         fontFamily: "Roboto",
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 15)),
+        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
         appBarTheme: const AppBarTheme(centerTitle: false),
       ),
       home: const MyHomePage(title: title),
@@ -47,29 +48,38 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FocusNode focusNode = FocusNode();
-  bool scaleMediaQuery = true;
+  bool scaleMediaQueryData = true;
 
   @override
   Widget build(BuildContext context) {
-    var scaledData = MediaQuery.of(context);
+    final originalMediaQueryData = MediaQuery.of(context);
+    late final MediaQueryData scaledMediaQueryData;
 
-    // use mediaQueryData.scale to properly display keyboard
-    if (scaleMediaQuery) scaledData = scaledData.scale(baseWidth);
+    // Scale mediaQueryData to properly display keyboard
+    if (scaleMediaQueryData) {
+      scaledMediaQueryData = originalMediaQueryData.scale(baseWidth);
+    }
 
     return MediaQuery(
-      data: scaledData,
+      data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(
+            widget.title,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           actions: [
-            Switch(
-              value: scaleMediaQuery,
-              activeColor: Colors.purple.shade300,
-              onChanged: (bool toScale) {
-                setState(() {
-                  scaleMediaQuery = toScale;
-                });
-              },
+            Tooltip(
+              message: "Scale mediaQueryData",
+              child: Switch(
+                value: scaleMediaQueryData,
+                activeColor: Colors.purple.shade300,
+                onChanged: (bool toScale) {
+                  setState(() {
+                    scaleMediaQueryData = toScale;
+                  });
+                },
+              ),
             )
           ],
         ),
@@ -107,14 +117,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 250,
                 child: const AspectRatio(
                   aspectRatio: 1,
-                  child: Center(child: Text('250 x 250')),
+                  child: Center(child: Text("250 x 250")),
                 ),
               ),
             ),
-            MediaQueryDataText(scaledData),
+            MediaQueryDataText(
+              originalMediaQueryData,
+              title: "Original mediaQueryData",
+            ),
+            if (scaleMediaQueryData)
+              MediaQueryDataText(
+                scaledMediaQueryData,
+                title: "Scaled mediaQueryData",
+              ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          tooltip: "Push/pop keyboard",
           child: const Icon(Icons.keyboard),
           onPressed: () {
             if (focusNode.hasFocus) {
@@ -130,18 +149,32 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class MediaQueryDataText extends StatelessWidget {
+  final String title;
   final MediaQueryData data;
-  const MediaQueryDataText(this.data, {Key? key}) : super(key: key);
+  const MediaQueryDataText(this.data, {Key? key, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _data = MediaQuery.of(context);
-    return Text(
-      'mediaQuery screen size is ${doubleStr(_data.size.width)} x ${doubleStr(_data.size.height)}\n'
-      'mediaQuery devicePixelRatio is ${doubleStr(_data.devicePixelRatio, 1)}\n'
-      'mediaQuery viewInsets is ${paddingStr(data.viewInsets)} \n'
-      'mediaQuery viewPadding is ${paddingStr(data.viewPadding)} \n'
-      'mediaQuery padding is ${paddingStr(data.padding)} \n',
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title + "",
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          Text(
+            "screen size is ${doubleStr(data.size.width)} x ${doubleStr(data.size.height)}\n"
+            "devicePixelRatio is ${doubleStr(data.devicePixelRatio, 1)}\n"
+            "viewInsets is ${paddingStr(data.viewInsets)}\n"
+            // 'viewPadding is ${paddingStr(data.viewPadding)} \n'
+            "padding is ${paddingStr(data.padding)}",
+          ),
+        ],
+      ),
     );
   }
 
@@ -154,6 +187,6 @@ class MediaQueryDataText extends StatelessWidget {
     var r = doubleStr(pad.right);
     var t = doubleStr(pad.top);
     var b = doubleStr(pad.bottom);
-    return '($l, $t, $r, $b)';
+    return "($l, $t, $r, $b)";
   }
 }
