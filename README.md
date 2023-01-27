@@ -35,7 +35,7 @@ After:
 
 Use this package in your Flutter app when:
 
-- the UI design is fixed-width
+- your UI design is fixed-width
 - you want to scale the entire UI, not just part of it
 
 ## Getting Started
@@ -45,18 +45,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.2.5
-```
-
-For projects using Flutter 2.x.x, add the following dependency:
-
-```yaml
-dependencies:
-  ...
-  scaled_app:
-    git:
-      url: https://github.com/LastMonopoly/scaled_app.git
-      ref: flutter_2.x.x
+  scaled_app: ^0.3.0
 ```
 
 Import it:
@@ -101,6 +90,9 @@ class PageRoute extends StatelessWidget {
   }
 }
 ```
+
+## Example
+https://github.com/LastMonopoly/scaled_app/blob/master/example/lib/main.dart
 
 ## Reference
 
