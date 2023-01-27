@@ -4,8 +4,8 @@ version: 0.3.0
 homepage: https://github.com/LastMonopoly/scaled_app
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
-  flutter: '>=3.0.0'
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
@@ -52,3 +52,11 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+screenshots:
+  - description: "Screenshots before scaling: 250x250 square is the same size across devices"
+    path: screenshots/Before.png
+  - description: "Screenshots after scaling: 250x250 square is two thirds the screen width across devices"
+    path: screenshots/After.png
+  - description: "Resized screenshots after scaling: everything appears the same size"
+    path: screenshots/After_2.png
