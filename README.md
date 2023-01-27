@@ -18,17 +18,17 @@ Button, image, font, everything is scaled automatically.
 Before:
 - 250x250 square is the same size across devices
 
-![Screenshots of the same design before scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/doc/Before.png "Screenshots before scaling")
+![Screenshots of the same design before scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/screenshots/Before.png "Screenshots before scaling")
   
 After:
 - 250x250 square is two thirds the screen width across devices
 
-![Screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/doc/After.png "Screenshots after scaling")
+![Screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/screenshots/After.png "Screenshots after scaling")
 
 - if we resize the screenshots above to be the same width
 - then everything appears the same size as below
 
-![Resized screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/doc/After_2.png "Resized screenshots after scaling")
+![Resized screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/screenshots/After_2.png "Resized screenshots after scaling")
 
 
 ## Features
