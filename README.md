@@ -30,6 +30,9 @@ After:
 
 ![Resized screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/screenshots/After_2.png "Resized screenshots after scaling")
 
+## Live demo
+
+https://lastmonopoly.github.io/flutter_web_app/scaled_app_demo/
 
 ## Features
 
@@ -45,7 +48,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.3.0
+  scaled_app: ^0.3.1
 ```
 
 Import it:
@@ -90,9 +93,6 @@ class PageRoute extends StatelessWidget {
   }
 }
 ```
-
-## Example
-https://github.com/LastMonopoly/scaled_app/blob/master/example/lib/main.dart
 
 ## Reference
 

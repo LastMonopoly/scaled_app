@@ -163,7 +163,7 @@ class MediaQueryDataText extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title + "",
+            title,
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           Text(

@@ -1,3 +1,7 @@
+## 0.3.1
+
+* Add web app live demo
+
 ## 0.3.0
 
 * Migrate to Flutter 3.7
