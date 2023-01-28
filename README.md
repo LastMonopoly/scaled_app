@@ -74,7 +74,7 @@ void main() {
   // Scaling will be applied when [applyScaling] returns true
   ScaledWidgetsFlutterBinding.ensureInitialized(
     baseWidth: 375,
-    applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 400,
+    applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 450,
   );
   runAppScaled(const MyApp());
 }
