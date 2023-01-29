@@ -3,10 +3,15 @@ import "package:scaled_app/scaled_app.dart";
 
 // screen width used in your UI design
 const double baseWidth = 375;
+const bool applyScaling = true;
 
 void main() {
   // 1st way to use runAppScaled
-  runAppScaled(const MyApp(), baseWidth: baseWidth);
+  runAppScaled(
+    const MyApp(),
+    baseWidth: baseWidth,
+    applyScaling: (deviceWidth) => applyScaling,
+  );
 
   // 2nd way to use runAppScaled
   // Scaling will be applied when [applyScaling] returns true
@@ -48,7 +53,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FocusNode focusNode = FocusNode();
-  bool scaleMediaQueryData = true;
+
+  bool _scaleMediaQueryData = true;
+  bool get scaleMediaQueryData => _scaleMediaQueryData && applyScaling;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 activeColor: Colors.purple.shade300,
                 onChanged: (bool toScale) {
                   setState(() {
-                    scaleMediaQueryData = toScale;
+                    _scaleMediaQueryData = toScale;
                   });
                 },
               ),
