@@ -1,12 +1,24 @@
 import "package:flutter/material.dart";
 import "package:scaled_app/scaled_app.dart";
+import "package:scaled_app_example/layout_block.dart";
+
+import "media_query_data_text.dart";
+import "new_page.dart";
 
 // screen width used in your UI design
 const double baseWidth = 375;
+bool applyScaling = true;
 
 void main() {
   // 1st way to use runAppScaled
-  runAppScaled(const MyApp(), baseWidth: baseWidth);
+  runAppScaled(
+    const MyApp(),
+    baseWidth: baseWidth,
+    applyScaling: (deviceWidth) {
+      debugPrint("Scaling: $applyScaling");
+      return applyScaling;
+    },
+  );
 
   // 2nd way to use runAppScaled
   // Scaling will be applied when [applyScaling] returns true
@@ -88,39 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Offstage(
               child: TextField(focusNode: focusNode),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(color: Colors.purple.shade200),
-                  ),
-                ),
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(color: Colors.purple.shade100),
-                  ),
-                ),
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(color: Colors.purple.shade50),
-                  ),
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                color: Colors.purple.shade50,
-                width: 250,
-                child: const AspectRatio(
-                  aspectRatio: 1,
-                  child: Center(child: Text("250 x 250")),
-                ),
-              ),
-            ),
+            const LayoutBlock(),
             MediaQueryDataText(
               originalMediaQueryData,
               title: "Original mediaQueryData",
@@ -132,61 +112,40 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          tooltip: "Push/pop keyboard",
-          child: const Icon(Icons.keyboard),
-          onPressed: () {
-            if (focusNode.hasFocus) {
-              focusNode.unfocus();
-            } else {
-              focusNode.requestFocus();
-            }
-          },
+        floatingActionButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton(
+              heroTag: "btn1",
+              child: applyScaling
+                  ? const Icon(Icons.toggle_on)
+                  : const Icon(Icons.toggle_off),
+              onPressed: () {
+                setState(() {
+                  applyScaling = !applyScaling;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NewPage()),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            FloatingActionButton(
+              heroTag: "btn2",
+              tooltip: "Push/pop keyboard",
+              child: const Icon(Icons.keyboard),
+              onPressed: () {
+                if (focusNode.hasFocus) {
+                  focusNode.unfocus();
+                } else {
+                  focusNode.requestFocus();
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
-  }
-}
-
-class MediaQueryDataText extends StatelessWidget {
-  final String title;
-  final MediaQueryData data;
-  const MediaQueryDataText(this.data, {Key? key, required this.title})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          Text(
-            "screen size is ${doubleStr(data.size.width)} x ${doubleStr(data.size.height)}\n"
-            "devicePixelRatio is ${doubleStr(data.devicePixelRatio, 1)}\n"
-            "viewInsets is ${paddingStr(data.viewInsets)}\n"
-            // 'viewPadding is ${paddingStr(data.viewPadding)} \n'
-            "padding is ${paddingStr(data.padding)}",
-          ),
-        ],
-      ),
-    );
-  }
-
-  String doubleStr(double d, [int precision = 0]) {
-    return d.toStringAsFixed(precision);
-  }
-
-  String paddingStr(EdgeInsets pad) {
-    var l = doubleStr(pad.left);
-    var r = doubleStr(pad.right);
-    var t = doubleStr(pad.top);
-    var b = doubleStr(pad.bottom);
-    return "($l, $t, $r, $b)";
   }
 }
