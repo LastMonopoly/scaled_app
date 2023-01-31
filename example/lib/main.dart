@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import "package:scaled_app/scaled_app.dart";
-import "package:scaled_app_example/layout_block.dart";
+import "package:scaled_app_example/scale_the_app_demo.dart";
 
-import "media_query_data_text.dart";
-import "new_page.dart";
+import 'scale_media_query_data_demo.dart';
 
 // screen width used in your UI design
 const double baseWidth = 375;
@@ -45,107 +44,46 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
         appBarTheme: const AppBarTheme(centerTitle: false),
       ),
-      home: const MyHomePage(title: title),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  FocusNode focusNode = FocusNode();
-  bool scaleMediaQueryData = true;
+class _HomePageState extends State<HomePage> {
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final originalMediaQueryData = MediaQuery.of(context);
-    late final MediaQueryData scaledMediaQueryData;
-
-    // Scale mediaQueryData to properly display keyboard
-    if (scaleMediaQueryData) {
-      scaledMediaQueryData = originalMediaQueryData.scale(baseWidth);
-    }
-
-    return MediaQuery(
-      data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.title,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.toggle_on_outlined),
+            label: 'Enable / disable',
           ),
-          actions: [
-            Tooltip(
-              message: "Scale mediaQueryData",
-              child: Switch(
-                value: scaleMediaQueryData,
-                activeColor: Colors.purple.shade300,
-                onChanged: (bool toScale) {
-                  setState(() {
-                    scaleMediaQueryData = toScale;
-                  });
-                },
-              ),
-            )
-          ],
-        ),
-        body: ListView(
-          children: [
-            Offstage(
-              child: TextField(focusNode: focusNode),
-            ),
-            const LayoutBlock(),
-            MediaQueryDataText(
-              originalMediaQueryData,
-              title: "Original mediaQueryData",
-            ),
-            if (scaleMediaQueryData)
-              MediaQueryDataText(
-                scaledMediaQueryData,
-                title: "Scaled mediaQueryData",
-              ),
-          ],
-        ),
-        floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FloatingActionButton(
-              heroTag: "btn1",
-              child: applyScaling
-                  ? const Icon(Icons.toggle_on)
-                  : const Icon(Icons.toggle_off),
-              onPressed: () {
-                setState(() {
-                  applyScaling = !applyScaling;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NewPage()),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            FloatingActionButton(
-              heroTag: "btn2",
-              tooltip: "Push/pop keyboard",
-              child: const Icon(Icons.keyboard),
-              onPressed: () {
-                if (focusNode.hasFocus) {
-                  focusNode.unfocus();
-                } else {
-                  focusNode.requestFocus();
-                }
-              },
-            ),
-          ],
-        ),
+          NavigationDestination(
+            icon: Icon(Icons.keyboard_capslock),
+            label: 'MediaQueryData',
+          ),
+        ],
       ),
+      body: <Widget>[
+        const ScaleTheAppDemo(),
+        const ScaleMediaQueryDataDemo(),
+      ][currentPageIndex],
     );
   }
 }
