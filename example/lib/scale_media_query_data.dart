@@ -5,15 +5,15 @@ import "package:scaled_app_example/layout_block.dart";
 import "main.dart";
 import "media_query_data_text.dart";
 
-class ScaleMediaQueryDataDemo extends StatefulWidget {
-  const ScaleMediaQueryDataDemo({super.key});
+class ScaledMediaQueryDataDemo extends StatefulWidget {
+  const ScaledMediaQueryDataDemo({super.key});
 
   @override
-  State<ScaleMediaQueryDataDemo> createState() =>
-      _ScaleMediaQueryDataDemoState();
+  State<ScaledMediaQueryDataDemo> createState() =>
+      _ScaledMediaQueryDataDemoState();
 }
 
-class _ScaleMediaQueryDataDemoState extends State<ScaleMediaQueryDataDemo> {
+class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
   FocusNode focusNode = FocusNode();
   bool scaleMediaQueryData = true;
 

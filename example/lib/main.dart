@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:scaled_app/scaled_app.dart";
-import "package:scaled_app_example/scale_the_app_demo.dart";
 
-import 'scale_media_query_data_demo.dart';
+import 'scale_media_query_data.dart';
+import 'scale_the_app.dart';
 
 // screen width used in your UI design
 const double baseWidth = 375;
@@ -81,8 +81,8 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: <Widget>[
-        const ScaleTheAppDemo(),
-        const ScaleMediaQueryDataDemo(),
+        const ScaledAppDemo(),
+        const ScaledMediaQueryDataDemo(),
       ][currentPageIndex],
     );
   }

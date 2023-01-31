@@ -4,14 +4,14 @@ import 'layout_block.dart';
 import 'main.dart';
 import 'media_query_data_text.dart';
 
-class ScaleTheAppDemo extends StatefulWidget {
-  const ScaleTheAppDemo({Key? key}) : super(key: key);
+class ScaledAppDemo extends StatefulWidget {
+  const ScaledAppDemo({Key? key}) : super(key: key);
 
   @override
-  State<ScaleTheAppDemo> createState() => _ScaleTheAppDemoState();
+  State<ScaledAppDemo> createState() => _ScaledAppDemoState();
 }
 
-class _ScaleTheAppDemoState extends State<ScaleTheAppDemo> {
+class _ScaledAppDemoState extends State<ScaledAppDemo> {
   bool scaleTheApp = applyScaling;
 
   @override
