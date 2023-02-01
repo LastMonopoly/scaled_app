@@ -30,10 +30,8 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// Calculate the scale factor.
   ScaleFactorCallback? _scaleFactor;
 
-  ScaledWidgetsFlutterBinding({ScaleFactorCallback? scaleFactor})
+  ScaledWidgetsFlutterBinding._({ScaleFactorCallback? scaleFactor})
       : _scaleFactor = scaleFactor;
-
-  static ScaledWidgetsFlutterBinding? _binding;
 
   ScaleFactorCallback get scaleFactor => _scaleFactor ?? (_) => 1.0;
 
@@ -45,19 +43,19 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   double get scale =>
       scaleFactor(window.physicalSize / window.devicePixelRatio);
 
-  double get devicePixelRatioScaled =>
-      window.devicePixelRatio *
-      scaleFactor(window.physicalSize / window.devicePixelRatio);
+  double get devicePixelRatioScaled => window.devicePixelRatio * scale;
 
-  bool get isScaling =>
-      scaleFactor(window.physicalSize / window.devicePixelRatio) != 1.0;
+  bool get isScaling => scale != 1.0;
+
+  static ScaledWidgetsFlutterBinding? _binding;
 
   /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
   ///
   /// Scaling will be applied based on [scaleFactor] function.
   ///
   static WidgetsBinding ensureInitialized({ScaleFactorCallback? scaleFactor}) {
-    _binding ??= ScaledWidgetsFlutterBinding(scaleFactor: scaleFactor);
+    _binding ??= ScaledWidgetsFlutterBinding._(scaleFactor: scaleFactor);
+    _binding!._scaleFactor = scaleFactor;
     return _binding!;
   }
 

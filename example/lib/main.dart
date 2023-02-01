@@ -6,7 +6,6 @@ import 'scale_the_app.dart';
 
 // screen width used in your UI design
 const double baseWidth = 375;
-const bool applyScaling = true;
 
 void main() {
   // 1st way to use runAppScaled
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     final scaledMediaQueryData = originalMediaQueryData.scale();
 
     return MediaQuery(
-      // Scale mediaQueryData to properly display keyboard
+      // Don't forget to scale mediaQueryData to properly display keyboard
       data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
       child: Scaffold(
         bottomNavigationBar: NavigationBar(
