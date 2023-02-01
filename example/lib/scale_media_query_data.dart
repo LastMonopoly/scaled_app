@@ -1,9 +1,17 @@
 import "package:flutter/material.dart";
-
 import "shared/media_query_data_text.dart";
 
 class ScaledMediaQueryDataDemo extends StatefulWidget {
-  const ScaledMediaQueryDataDemo({super.key});
+  final bool scaleMediaQueryData;
+  final MediaQueryData mediaQueryData;
+  final void Function(bool value) onToggleScaleMediaQueryData;
+
+  const ScaledMediaQueryDataDemo({
+    super.key,
+    required this.scaleMediaQueryData,
+    required this.mediaQueryData,
+    required this.onToggleScaleMediaQueryData,
+  });
 
   @override
   State<ScaledMediaQueryDataDemo> createState() =>
@@ -12,11 +20,12 @@ class ScaledMediaQueryDataDemo extends StatefulWidget {
 
 class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
   FocusNode keyboardFocusNode = FocusNode();
-  bool scaleMediaQueryData = true;
+  late bool scaleMediaQueryData;
 
   @override
   void initState() {
     super.initState();
+    scaleMediaQueryData = widget.scaleMediaQueryData;
     keyboardFocusNode.requestFocus();
   }
 
@@ -28,6 +37,7 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text(
           "Scale mediaQueryData",
@@ -43,19 +53,30 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
                 setState(() {
                   scaleMediaQueryData = value;
                 });
+                widget.onToggleScaleMediaQueryData(scaleMediaQueryData);
               },
             ),
           )
         ],
       ),
-      body: ListView(
+      body: Stack(
         children: [
-          Offstage(child: TextField(focusNode: keyboardFocusNode)),
-          if (scaleMediaQueryData)
-            MediaQueryDataText(
-              MediaQuery.of(context),
-              title: "Scaled mediaQueryData",
+          const Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 70, 20),
+              child: Text("Scale mediaQueryData to properly display keyboard"),
             ),
+          ),
+          ListView(
+            children: [
+              Offstage(child: TextField(focusNode: keyboardFocusNode)),
+              MediaQueryDataText(
+                widget.mediaQueryData,
+                title: "Scaled mediaQueryData",
+              ),
+            ],
+          ),
         ],
       ),
       backgroundColor: Colors.purple.shade50,

@@ -52,12 +52,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
+  bool scaleMediaQueryData = true;
 
   @override
   Widget build(BuildContext context) {
+    final originalMediaQueryData = MediaQuery.of(context);
+    final scaledMediaQueryData = originalMediaQueryData.scale();
+
     return MediaQuery(
       // Scale mediaQueryData to properly display keyboard
-      data: MediaQuery.of(context).scale(),
+      data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
       child: Scaffold(
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {
@@ -78,8 +82,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: <Widget>[
-          const ScaledAppDemo(),
-          const ScaledMediaQueryDataDemo(),
+          ScaledAppDemo(mediaQueryData: originalMediaQueryData),
+          ScaledMediaQueryDataDemo(
+            scaleMediaQueryData: scaleMediaQueryData,
+            mediaQueryData: scaleMediaQueryData
+                ? scaledMediaQueryData
+                : originalMediaQueryData,
+            onToggleScaleMediaQueryData: (value) {
+              setState(() {
+                scaleMediaQueryData = value;
+              });
+            },
+          ),
         ][currentPageIndex],
       ),
     );

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
-import 'package:scaled_app_example/main.dart';
-import 'package:scaled_app_example/shared/layout_block.dart';
-import 'package:scaled_app_example/shared/media_query_data_text.dart';
+import 'main.dart';
+import 'shared/layout_block.dart';
+import 'shared/media_query_data_text.dart';
 
 class ScaledAppDemo extends StatefulWidget {
-  const ScaledAppDemo({Key? key}) : super(key: key);
+  final MediaQueryData mediaQueryData;
+  const ScaledAppDemo({Key? key, required this.mediaQueryData})
+      : super(key: key);
 
   @override
   State<ScaledAppDemo> createState() => _ScaledAppDemoState();
@@ -19,6 +21,16 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
   void initState() {
     super.initState();
     isScaling = binding.isScaling;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Future(() {
+      binding.scaleFactor = (deviceSize) {
+        return deviceSize.width / baseWidth;
+      };
+    });
   }
 
   @override
@@ -55,7 +67,7 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
         children: [
           const LayoutBlock(),
           MediaQueryDataText(
-            MediaQuery.of(context),
+            widget.mediaQueryData,
             title: "Original mediaQueryData",
           ),
         ],
