@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
 import 'package:scaled_app_example/main.dart';
-
-import 'layout_block.dart';
-import 'media_query_data_text.dart';
+import 'package:scaled_app_example/shared/layout_block.dart';
+import 'package:scaled_app_example/shared/media_query_data_text.dart';
 
 class ScaledAppDemo extends StatefulWidget {
   const ScaledAppDemo({Key? key}) : super(key: key);

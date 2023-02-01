@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
-import "package:scaled_app_example/layout_block.dart";
 
-import "media_query_data_text.dart";
+import "shared/media_query_data_text.dart";
 
 class ScaledMediaQueryDataDemo extends StatefulWidget {
   const ScaledMediaQueryDataDemo({super.key});
@@ -12,12 +11,13 @@ class ScaledMediaQueryDataDemo extends StatefulWidget {
 }
 
 class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
-  FocusNode focusNode = FocusNode();
+  FocusNode keyboardFocusNode = FocusNode();
   bool scaleMediaQueryData = true;
 
   @override
   void initState() {
     super.initState();
+    keyboardFocusNode.requestFocus();
   }
 
   @override
@@ -33,11 +33,24 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
           "Scale mediaQueryData",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Switch(
+              value: scaleMediaQueryData,
+              activeColor: Colors.purple.shade300,
+              onChanged: (bool value) {
+                setState(() {
+                  scaleMediaQueryData = value;
+                });
+              },
+            ),
+          )
+        ],
       ),
       body: ListView(
         children: [
-          Offstage(child: TextField(focusNode: focusNode)),
-          const LayoutBlock(),
+          Offstage(child: TextField(focusNode: keyboardFocusNode)),
           if (scaleMediaQueryData)
             MediaQueryDataText(
               MediaQuery.of(context),
@@ -45,14 +58,15 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
             ),
         ],
       ),
+      backgroundColor: Colors.purple.shade50,
       floatingActionButton: FloatingActionButton(
         tooltip: "Push/pop keyboard",
         child: const Icon(Icons.keyboard),
         onPressed: () {
-          if (focusNode.hasFocus) {
-            focusNode.unfocus();
+          if (keyboardFocusNode.hasFocus) {
+            keyboardFocusNode.unfocus();
           } else {
-            focusNode.requestFocus();
+            keyboardFocusNode.requestFocus();
           }
         },
       ),
