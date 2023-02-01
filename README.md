@@ -13,7 +13,7 @@ and the Flutter guide for
 
 Scale the entire UI design proportionally.
 
-Button, image, font, everything is scaled automatically.
+Button, image, font, every widget is scaled simultaneously.
 
 Before:
 - 250x250 square is the same size across devices
@@ -59,22 +59,28 @@ import 'package:scaled_app/scaled_app.dart';
 
 ## Usage
 
-Replace `runApp` with `runAppScaled`
+Firstly, replace `runApp` with `runAppScaled`
 ```dart
 void main() {
-  // 1st way to use this package
-  // baseWidth is the screen width used in your UI design
-  runAppScaled(const MyApp(), baseWidth: 375);
+  // 1st way to use this package  
+  runAppScaled(const MyApp(), scaleFactor: (deviceSize) {
+    // screen width used in your UI design
+    const double widthOfDesign = 375;
+    return deviceSize.width / widthOfDesign;
+  });
 }
 ```
 Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
 ```dart
 void main() {
   // 2nd way to use this package
-  // Scaling will be applied when [applyScaling] returns true
+  // Scaling will be applied based on [scaleFactor] function.
   ScaledWidgetsFlutterBinding.ensureInitialized(
-    baseWidth: 375,
-    applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 450,
+    scaleFactor: (deviceSize) {
+      // screen width used in your UI design
+      const double widthOfDesign = 375;
+      return deviceSize.width / widthOfDesign;
+    },
   );
   runAppScaled(const MyApp());
 }
@@ -87,12 +93,13 @@ class PageRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).scale(baseWidth),
+      data: MediaQuery.of(context).scale(),
       child: const Scaffold(...),
     );
   }
 }
 ```
+Optionally, update `ScaledWidgetsFlutterBinding.instance.scaleFactor` to enable / disable scaling on demand.
 
 ## Reference
 
