@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scaled_app/scaled_app.dart';
+import 'package:scaled_app_example/main.dart';
 
 import 'layout_block.dart';
-import 'main.dart';
 import 'media_query_data_text.dart';
 
 class ScaledAppDemo extends StatefulWidget {
@@ -12,7 +13,14 @@ class ScaledAppDemo extends StatefulWidget {
 }
 
 class _ScaledAppDemoState extends State<ScaledAppDemo> {
-  bool scaleTheApp = applyScaling;
+  final binding = ScaledWidgetsFlutterBinding.instance;
+  late bool isScaling;
+
+  @override
+  void initState() {
+    super.initState();
+    isScaling = binding.isScaling;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +31,21 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
         actions: [
-          Tooltip(
-            message: "Scale mediaQueryData",
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
             child: Switch(
-              value: scaleTheApp,
+              value: isScaling,
               activeColor: Colors.purple.shade300,
               onChanged: (bool value) {
                 setState(() {
-                  scaleTheApp = value;
-                  applyScaling = scaleTheApp;
+                  isScaling = value;
+                  if (isScaling) {
+                    binding.scaleFactor = (deviceSize) {
+                      return deviceSize.width / baseWidth;
+                    };
+                  } else {
+                    binding.scaleFactor = null;
+                  }
                 });
               },
             ),

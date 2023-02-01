@@ -6,24 +6,18 @@ import 'scale_the_app.dart';
 
 // screen width used in your UI design
 const double baseWidth = 375;
-bool applyScaling = true;
 
 void main() {
   // 1st way to use runAppScaled
   runAppScaled(
     const MyApp(),
-    baseWidth: baseWidth,
-    applyScaling: (deviceWidth) {
-      debugPrint("Scaling: $applyScaling");
-      return applyScaling;
-    },
+    scaleFactor: (deviceSize) => deviceSize.width / baseWidth,
   );
 
   // 2nd way to use runAppScaled
-  // Scaling will be applied when [applyScaling] returns true
+  // Scaling will be applied based on [scaleFactor] function.
   // ScaledWidgetsFlutterBinding.ensureInitialized(
-  //   baseWidth: baseWidth,
-  //   applyScaling: (deviceWidth) => deviceWidth > 300 && deviceWidth < 450,
+  //   scaleFactor: (deviceSize) => deviceSize.width / baseWidth,
   // );
   // runAppScaled(const MyApp());
 }
@@ -61,29 +55,33 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.toggle_on_outlined),
-            label: 'Enable / disable',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.keyboard_capslock),
-            label: 'MediaQueryData',
-          ),
-        ],
+    return MediaQuery(
+      // Scale mediaQueryData to properly display keyboard
+      data: MediaQuery.of(context).scale(),
+      child: Scaffold(
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(Icons.toggle_on_outlined),
+              label: 'Enable / disable',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.keyboard_capslock),
+              label: 'MediaQueryData',
+            ),
+          ],
+        ),
+        body: <Widget>[
+          const ScaledAppDemo(),
+          const ScaledMediaQueryDataDemo(),
+        ][currentPageIndex],
       ),
-      body: <Widget>[
-        const ScaledAppDemo(),
-        const ScaledMediaQueryDataDemo(),
-      ][currentPageIndex],
     );
   }
 }

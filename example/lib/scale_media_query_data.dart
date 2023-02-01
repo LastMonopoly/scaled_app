@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
-import "package:scaled_app/scaled_app.dart";
 import "package:scaled_app_example/layout_block.dart";
 
-import "main.dart";
 import "media_query_data_text.dart";
 
 class ScaledMediaQueryDataDemo extends StatefulWidget {
@@ -29,14 +27,6 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
 
   @override
   Widget build(BuildContext context) {
-    final originalMediaQueryData = MediaQuery.of(context);
-    late final MediaQueryData scaledMediaQueryData;
-
-    // Scale mediaQueryData to properly display keyboard
-    if (scaleMediaQueryData) {
-      scaledMediaQueryData = originalMediaQueryData.scale(baseWidth);
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -50,7 +40,7 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
           const LayoutBlock(),
           if (scaleMediaQueryData)
             MediaQueryDataText(
-              scaledMediaQueryData,
+              MediaQuery.of(context),
               title: "Scaled mediaQueryData",
             ),
         ],

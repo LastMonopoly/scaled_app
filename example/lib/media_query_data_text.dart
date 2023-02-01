@@ -22,7 +22,7 @@ class MediaQueryDataText extends StatelessWidget {
             "screen size is ${doubleStr(data.size.width)} x ${doubleStr(data.size.height)}\n"
             "devicePixelRatio is ${doubleStr(data.devicePixelRatio, 1)}\n"
             "viewInsets is ${paddingStr(data.viewInsets)}\n"
-            // 'viewPadding is ${paddingStr(data.viewPadding)} \n'
+            'viewPadding is ${paddingStr(data.viewPadding)} \n'
             "padding is ${paddingStr(data.padding)}",
           ),
         ],
