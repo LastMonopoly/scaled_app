@@ -1,3 +1,8 @@
+## 0.4.0
+
+* **BREAKING**: use ScaleFactorCallback to simplify scaling logic
+* Support for updating scaling logic, which means you can enable / disable scaling on demand
+
 ## 0.3.1
 
 * Add web app live demo

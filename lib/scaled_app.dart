@@ -55,7 +55,6 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   ///
   static WidgetsBinding ensureInitialized({ScaleFactorCallback? scaleFactor}) {
     _binding ??= ScaledWidgetsFlutterBinding._(scaleFactor: scaleFactor);
-    _binding!._scaleFactor = scaleFactor;
     return _binding!;
   }
 

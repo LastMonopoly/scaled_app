@@ -26,11 +26,7 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
   @override
   void dispose() {
     super.dispose();
-    Future(() {
-      binding.scaleFactor = (deviceSize) {
-        return deviceSize.width / baseWidth;
-      };
-    });
+    Future(() => binding.scaleFactor = scaleFactorCallback);
   }
 
   @override
@@ -51,9 +47,7 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
                 setState(() {
                   isScaling = value;
                   if (isScaling) {
-                    binding.scaleFactor = (deviceSize) {
-                      return deviceSize.width / baseWidth;
-                    };
+                    binding.scaleFactor = scaleFactorCallback;
                   } else {
                     binding.scaleFactor = null;
                   }

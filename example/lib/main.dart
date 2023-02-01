@@ -4,20 +4,20 @@ import "package:scaled_app/scaled_app.dart";
 import 'scale_media_query_data.dart';
 import 'scale_the_app.dart';
 
-// screen width used in your UI design
-const double baseWidth = 375;
+ScaleFactorCallback scaleFactorCallback = (deviceSize) {
+  // screen width used in your UI design
+  const double widthOfDesign = 375;
+  return deviceSize.width / widthOfDesign;
+};
 
 void main() {
   // 1st way to use runAppScaled
-  runAppScaled(
-    const MyApp(),
-    scaleFactor: (deviceSize) => deviceSize.width / baseWidth,
-  );
+  runAppScaled(const MyApp(), scaleFactor: scaleFactorCallback);
 
   // 2nd way to use runAppScaled
   // Scaling will be applied based on [scaleFactor] function.
   // ScaledWidgetsFlutterBinding.ensureInitialized(
-  //   scaleFactor: (deviceSize) => deviceSize.width / baseWidth,
+  //   scaleFactor: scaleFactorCallback,
   // );
   // runAppScaled(const MyApp());
 }
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     final scaledMediaQueryData = originalMediaQueryData.scale();
 
     return MediaQuery(
-      // Don't forget to scale mediaQueryData to properly display keyboard
+      // Don't forget to scale mediaQueryData in order to properly display keyboard
       data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
       child: Scaffold(
         bottomNavigationBar: NavigationBar(
