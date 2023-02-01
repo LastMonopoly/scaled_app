@@ -48,7 +48,7 @@ In the `pubspec.yaml` of your flutter project, add the following dependency:
 ```yaml
 dependencies:
   ...
-  scaled_app: ^0.4.0
+  scaled_app: ^0.4.1
 ```
 
 Import it:
@@ -62,7 +62,7 @@ import 'package:scaled_app/scaled_app.dart';
 Firstly, replace `runApp` with `runAppScaled`
 ```dart
 void main() {
-  // 1st way to use this package  
+  // 1st way to use this package
   runAppScaled(const MyApp(), scaleFactor: (deviceSize) {
     // screen width used in your UI design
     const double widthOfDesign = 375;
@@ -74,7 +74,7 @@ Or, replace `WidgetsFlutterBinding` with `ScaledWidgetsFlutterBinding`
 ```dart
 void main() {
   // 2nd way to use this package
-  // Scaling will be applied based on [scaleFactor] function.
+  // Scaling will be applied based on [scaleFactor] callback.
   ScaledWidgetsFlutterBinding.ensureInitialized(
     scaleFactor: (deviceSize) {
       // screen width used in your UI design
@@ -82,7 +82,7 @@ void main() {
       return deviceSize.width / widthOfDesign;
     },
   );
-  runAppScaled(const MyApp());
+  runApp(const MyApp());
 }
 ```
 Then, use `MediaQueryData.scale` to scale size, viewInsets, viewPadding, etc.

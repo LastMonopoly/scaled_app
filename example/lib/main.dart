@@ -11,15 +11,15 @@ ScaleFactorCallback scaleFactorCallback = (deviceSize) {
 };
 
 void main() {
-  // 1st way to use runAppScaled
+  // 1st way to use this package
   runAppScaled(const MyApp(), scaleFactor: scaleFactorCallback);
 
-  // 2nd way to use runAppScaled
-  // Scaling will be applied based on [scaleFactor] function.
+  // 2nd way to use this package
+  // Scaling will be applied based on [scaleFactor] callback.
   // ScaledWidgetsFlutterBinding.ensureInitialized(
   //   scaleFactor: scaleFactorCallback,
   // );
-  // runAppScaled(const MyApp());
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

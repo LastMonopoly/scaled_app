@@ -1,3 +1,7 @@
+## 0.4.1
+
+* Improve documentation
+
 ## 0.4.0
 
 * **BREAKING**: use ScaleFactorCallback to describe how & when to scale

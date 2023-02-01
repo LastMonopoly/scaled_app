@@ -5,11 +5,15 @@ import 'package:flutter/rendering.dart' show ViewConfiguration;
 import 'package:flutter/gestures.dart' show PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
+/// The size of the screen is in logical pixels.
+///
+/// Scale of 1 means original size.
+///
 typedef ScaleFactorCallback = double Function(Size deviceSize);
 
 /// Replace [runApp] with [runAppScaled] in `main()`.
 ///
-/// Scaling will be applied based on [scaleFactor] function.
+/// Scaling will be applied based on [scaleFactor] callback.
 ///
 void runAppScaled(Widget app, {ScaleFactorCallback? scaleFactor}) {
   WidgetsBinding binding = ScaledWidgetsFlutterBinding.ensureInitialized(
@@ -21,13 +25,10 @@ void runAppScaled(Widget app, {ScaleFactorCallback? scaleFactor}) {
   binding.scheduleWarmUpFrame();
 }
 
-/// A concrete binding for applications based on the Widgets framework.
+/// Adapted from [WidgetsFlutterBinding]
 ///
-/// This is the glue that binds the framework to the Flutter engine.
-///
-/// Inherit from [WidgetsFlutterBinding].
 class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
-  /// Calculate the scale factor.
+  /// Calculate scale factor from device size.
   ScaleFactorCallback? _scaleFactor;
 
   ScaledWidgetsFlutterBinding._({ScaleFactorCallback? scaleFactor})
@@ -35,6 +36,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   ScaleFactorCallback get scaleFactor => _scaleFactor ?? (_) => 1.0;
 
+  /// Update scaleFactor callback, then rebuild layout
   set scaleFactor(ScaleFactorCallback? callback) {
     _scaleFactor = callback;
     handleMetricsChanged();
@@ -49,9 +51,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   static ScaledWidgetsFlutterBinding? _binding;
 
-  /// Adapted from [WidgetsFlutterBinding.ensureInitialized]
-  ///
-  /// Scaling will be applied based on [scaleFactor] function.
+  /// Scaling will be applied based on [scaleFactor] callback.
   ///
   static WidgetsBinding ensureInitialized({ScaleFactorCallback? scaleFactor}) {
     _binding ??= ScaledWidgetsFlutterBinding._(scaleFactor: scaleFactor);
@@ -64,20 +64,22 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// change what size or device pixel ratio the [RenderView] will use.
   ///
   /// See more:
-  ///
   /// * [RendererBinding.createViewConfiguration]
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
-    if (!window.physicalSize.isEmpty) {
+    if (window.physicalSize.isEmpty) {
+      return super.createViewConfiguration();
+    } else {
       return ViewConfiguration(
         size: window.physicalSize / devicePixelRatioScaled,
         devicePixelRatio: devicePixelRatioScaled,
       );
-    } else {
-      return super.createViewConfiguration();
     }
   }
+
+  // @override
+  // SingletonFlutterWindow get window => super.window;
 
   /// Adapted from [GestureBinding.initInstances]
   @override
@@ -98,13 +100,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   ///
   /// [GestureBinding] uses [window.devicePixelRatio] for calculations,
   /// so we override corresponding methods.
+  ///
   void _handlePointerDataPacket(PointerDataPacket packet) {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
-    _pendingPointerEvents.addAll(PointerEventConverter.expand(
-      packet.data,
-      devicePixelRatioScaled,
-    ));
+    _pendingPointerEvents.addAll(
+        PointerEventConverter.expand(packet.data, devicePixelRatioScaled));
     if (!locked) {
       _flushPointerEventQueue();
     }
@@ -132,6 +133,14 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 }
 
 extension ScaledMediaQueryData on MediaQueryData {
+  /// Scale MediaQueryData accordingly,
+  /// so that widgets using [MediaQueryData.size],
+  /// [MediaQueryData.devicePixelRatio], [MediaQueryData.viewInsets],
+  /// [MediaQueryData.viewPadding], [MediaQueryData.padding]
+  /// can be laid out correctly.
+  ///
+  /// e.g. keyboard, appBar, navigationBar.
+  ///
   MediaQueryData scale() {
     final scale = (ScaledWidgetsFlutterBinding._binding?.scale ?? 1);
     return copyWith(
