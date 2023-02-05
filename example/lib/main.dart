@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import "package:scaled_app/scaled_app.dart";
 
@@ -63,24 +64,26 @@ class _HomePageState extends State<HomePage> {
       // Don't forget to scale mediaQueryData in order to properly display keyboard
       data: scaleMediaQueryData ? scaledMediaQueryData : originalMediaQueryData,
       child: Scaffold(
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(Icons.toggle_on_outlined),
-              label: 'Enable / disable',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.keyboard_capslock),
-              label: 'MediaQueryData',
-            ),
-          ],
-        ),
+        bottomNavigationBar: kIsWeb
+            ? null
+            : NavigationBar(
+                onDestinationSelected: (int index) {
+                  setState(() {
+                    currentPageIndex = index;
+                  });
+                },
+                selectedIndex: currentPageIndex,
+                destinations: const <Widget>[
+                  NavigationDestination(
+                    icon: Icon(Icons.toggle_on_outlined),
+                    label: 'Enable / disable',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.keyboard_capslock),
+                    label: 'MediaQueryData',
+                  ),
+                ],
+              ),
         body: <Widget>[
           ScaledAppDemo(mediaQueryData: originalMediaQueryData),
           ScaledMediaQueryDataDemo(
