@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final originalMediaQueryData = MediaQuery.of(context);
+    final originalMediaQueryData = MediaQuery.of(context).copyWith(
+      textScaleFactor: 1,
+    );
     final scaledMediaQueryData = originalMediaQueryData.scale();
 
     return MediaQuery(
