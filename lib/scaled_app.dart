@@ -45,7 +45,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   double get scale =>
       scaleFactor(window.physicalSize / window.devicePixelRatio);
 
-  double get devicePixelRatioScaled => window.devicePixelRatio * scale;
+  double devicePixelRatioScaled = 0;
 
   bool get isScaling => scale != 1.0;
 
@@ -71,6 +71,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     if (window.physicalSize.isEmpty) {
       return super.createViewConfiguration();
     } else {
+      devicePixelRatioScaled = window.devicePixelRatio * scale;
       return ViewConfiguration(
         size: window.physicalSize / devicePixelRatioScaled,
         devicePixelRatio: devicePixelRatioScaled,
