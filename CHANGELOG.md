@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Optimize ScaleFactorCallback thanks to [elMuso](https://github.com/LastMonopoly/scaled_app/pull/4)
+
 ## 1.0.0
 
 * Stable release

@@ -5,11 +5,11 @@ import "package:scaled_app/scaled_app.dart";
 import 'scale_media_query_data.dart';
 import 'scale_the_app.dart';
 
-ScaleFactorCallback scaleFactorCallback = (deviceSize) {
+double scaleFactorCallback(Size deviceSize) {
   // screen width used in your UI design
   const double widthOfDesign = 375;
   return deviceSize.width / widthOfDesign;
-};
+}
 
 void main() {
   // 1st way to use this package
