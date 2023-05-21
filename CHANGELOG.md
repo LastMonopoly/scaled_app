@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Migrate to Flutter 3.10.0
+
 ## 1.1.0
 
 * Optimize ScaleFactorCallback thanks to [elMuso](https://github.com/LastMonopoly/scaled_app/pull/4)

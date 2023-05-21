@@ -2,7 +2,7 @@ import 'dart:async' show scheduleMicrotask, Timer;
 import 'dart:collection' show Queue;
 import 'dart:ui' show PointerDataPacket;
 import 'package:flutter/rendering.dart' show ViewConfiguration;
-import 'package:flutter/gestures.dart' show PointerEventConverter;
+import 'package:flutter/gestures.dart' show FlutterView, PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
 /// The size of the screen is in logical pixels.
@@ -20,7 +20,7 @@ void runAppScaled(Widget app, {ScaleFactorCallback? scaleFactor}) {
     scaleFactor: scaleFactor,
   );
   Timer.run(() {
-    binding.attachRootWidget(app);
+    binding.attachRootWidget(binding.wrapWithDefaultView(app));
   });
   binding.scheduleWarmUpFrame();
 }
@@ -42,8 +42,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     handleMetricsChanged();
   }
 
-  double get scale =>
-      scaleFactor(window.physicalSize / window.devicePixelRatio);
+  double get scale {
+    final FlutterView view = platformDispatcher.implicitView!;
+    final devicePixelRatio = view.devicePixelRatio;
+    final physicalSize = view.physicalSize;
+    return scaleFactor(physicalSize / devicePixelRatio);
+  }
 
   double devicePixelRatioScaled = 0;
 
@@ -68,12 +72,16 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
   ViewConfiguration createViewConfiguration() {
-    if (window.physicalSize.isEmpty) {
+    final FlutterView view = platformDispatcher.implicitView!;
+    final devicePixelRatio = view.devicePixelRatio;
+    final physicalSize = view.physicalSize;
+
+    if (physicalSize.isEmpty) {
       return super.createViewConfiguration();
     } else {
-      devicePixelRatioScaled = window.devicePixelRatio * scale;
+      devicePixelRatioScaled = devicePixelRatio * scale;
       return ViewConfiguration(
-        size: window.physicalSize / devicePixelRatioScaled,
+        size: physicalSize / devicePixelRatioScaled,
         devicePixelRatio: devicePixelRatioScaled,
       );
     }
@@ -86,7 +94,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   @override
   void initInstances() {
     super.initInstances();
-    window.onPointerDataPacket = _handlePointerDataPacket;
+    platformDispatcher.onPointerDataPacket = _handlePointerDataPacket;
   }
 
   @override
@@ -99,16 +107,26 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
   /// When we scale UI using [ViewConfiguration], [ui.window] stays the same.
   ///
-  /// [GestureBinding] uses [window.devicePixelRatio] for calculations,
+  /// [GestureBinding] uses [platformDispatcher.implicitView.devicePixelRatio] for calculations,
   /// so we override corresponding methods.
   ///
   void _handlePointerDataPacket(PointerDataPacket packet) {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
-    _pendingPointerEvents.addAll(
-        PointerEventConverter.expand(packet.data, devicePixelRatioScaled));
-    if (!locked) {
-      _flushPointerEventQueue();
+    try {
+      _pendingPointerEvents.addAll(
+          PointerEventConverter.expand(packet.data, devicePixelRatioScaled));
+      if (!locked) {
+        _flushPointerEventQueue();
+      }
+    } catch (error, stack) {
+      FlutterError.reportError(FlutterErrorDetails(
+        exception: error,
+        stack: stack,
+        library: 'gestures library',
+        context:
+            ErrorDescription('while handling a scaled pointer data packet'),
+      ));
     }
   }
 
