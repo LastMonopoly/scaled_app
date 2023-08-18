@@ -114,8 +114,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
     try {
-      _pendingPointerEvents.addAll(
-          PointerEventConverter.expand(packet.data, devicePixelRatioScaled));
+      _pendingPointerEvents.addAll(PointerEventConverter.expand(
+        packet.data,
+        (viewId) {
+          return devicePixelRatioScaled;
+        },
+      ));
       if (!locked) {
         _flushPointerEventQueue();
       }
