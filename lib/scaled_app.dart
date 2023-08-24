@@ -1,7 +1,7 @@
 import 'dart:async' show scheduleMicrotask, Timer;
 import 'dart:collection' show Queue;
 import 'dart:ui' show PointerDataPacket;
-import 'package:flutter/rendering.dart' show ViewConfiguration;
+import 'package:flutter/rendering.dart' show RenderView, ViewConfiguration;
 import 'package:flutter/gestures.dart' show FlutterView, PointerEventConverter;
 import 'package:flutter/widgets.dart';
 
@@ -71,13 +71,13 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
   /// * [RendererBinding.createViewConfiguration]
   /// * [TestWidgetsFlutterBinding.createViewConfiguration]
   @override
-  ViewConfiguration createViewConfiguration() {
+  ViewConfiguration createViewConfigurationFor(RenderView renderView) {
     final FlutterView view = platformDispatcher.implicitView!;
     final devicePixelRatio = view.devicePixelRatio;
     final physicalSize = view.physicalSize;
 
     if (physicalSize.isEmpty) {
-      return super.createViewConfiguration();
+      return super.createViewConfigurationFor(renderView);
     } else {
       devicePixelRatioScaled = devicePixelRatio * scale;
       return ViewConfiguration(
