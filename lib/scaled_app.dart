@@ -1,8 +1,9 @@
 import 'dart:async' show scheduleMicrotask, Timer;
 import 'dart:collection' show Queue;
 import 'dart:ui' show PointerDataPacket;
-import 'package:flutter/rendering.dart' show RenderView, ViewConfiguration;
+
 import 'package:flutter/gestures.dart' show FlutterView, PointerEventConverter;
+import 'package:flutter/rendering.dart' show RenderView, ViewConfiguration;
 import 'package:flutter/widgets.dart';
 
 /// The size of the screen is in logical pixels.
