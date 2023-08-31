@@ -1,8 +1,9 @@
 import 'dart:async' show scheduleMicrotask, Timer;
 import 'dart:collection' show Queue;
 import 'dart:ui' show PointerDataPacket;
-import 'package:flutter/rendering.dart' show ViewConfiguration;
+
 import 'package:flutter/gestures.dart' show FlutterView, PointerEventConverter;
+import 'package:flutter/rendering.dart' show ViewConfiguration;
 import 'package:flutter/widgets.dart';
 
 /// The size of the screen is in logical pixels.
@@ -115,7 +116,10 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     // defined in a device-independent manner.
     try {
       _pendingPointerEvents.addAll(
-          PointerEventConverter.expand(packet.data, devicePixelRatioScaled));
+        PointerEventConverter.expand(packet.data, (viewId) {
+          return devicePixelRatioScaled;
+        }),
+      );
       if (!locked) {
         _flushPointerEventQueue();
       }
