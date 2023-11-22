@@ -1,11 +1,11 @@
 name: scaled_app
 description: Scale the entire UI design proportionally, useful when your UI design is fixed-width.
-version: 2.1.0
+version: 2.2.0
 homepage: https://github.com/LastMonopoly/scaled_app
 
 environment:
   sdk: ">=2.17.0 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:
