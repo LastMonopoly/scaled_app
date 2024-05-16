@@ -81,8 +81,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
       return super.createViewConfigurationFor(renderView);
     } else {
       devicePixelRatioScaled = devicePixelRatio * scale;
+
+      final BoxConstraints physicalConstraints =
+          BoxConstraints.fromViewConstraints(view.physicalConstraints);
       return ViewConfiguration(
-        size: physicalSize / devicePixelRatioScaled,
+        physicalConstraints: physicalConstraints,
+        logicalConstraints: physicalConstraints / devicePixelRatioScaled,
         devicePixelRatio: devicePixelRatioScaled,
       );
     }
@@ -115,11 +119,12 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     // We convert pointer data to logical pixels so that e.g. the touch slop can be
     // defined in a device-independent manner.
     try {
-      _pendingPointerEvents.addAll(
-        PointerEventConverter.expand(packet.data, (viewId) {
+      _pendingPointerEvents.addAll(PointerEventConverter.expand(
+        packet.data,
+        (viewId) {
           return devicePixelRatioScaled;
-        }),
-      );
+        },
+      ));
       if (!locked) {
         _flushPointerEventQueue();
       }
