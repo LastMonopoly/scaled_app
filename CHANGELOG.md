@@ -1,3 +1,9 @@
+## 2.3.0
+
+* Migrate to Flutter 3.22.0
+* Thanks [@selvam920](https://github.com/selvam920)
+
+
 ## 2.2.0
 
 * Migrate to Flutter 3.16.0, fix [#11](https://github.com/LastMonopoly/scaled_app/issues/11)
