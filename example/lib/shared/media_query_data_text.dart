@@ -3,8 +3,7 @@ import "package:flutter/material.dart";
 class MediaQueryDataText extends StatelessWidget {
   final String title;
   final MediaQueryData data;
-  const MediaQueryDataText(this.data, {Key? key, required this.title})
-      : super(key: key);
+  const MediaQueryDataText(this.data, {super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

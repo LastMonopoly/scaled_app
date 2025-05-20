@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:scaled_app/scaled_app.dart';
+
 import 'main.dart';
 import 'shared/layout_block.dart';
 import 'shared/media_query_data_text.dart';
 
 class ScaledAppDemo extends StatefulWidget {
   final MediaQueryData mediaQueryData;
-  const ScaledAppDemo({Key? key, required this.mediaQueryData})
-      : super(key: key);
+  const ScaledAppDemo({super.key, required this.mediaQueryData});
 
   @override
   State<ScaledAppDemo> createState() => _ScaledAppDemoState();
