@@ -48,7 +48,7 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
             padding: const EdgeInsets.only(right: 10),
             child: Switch(
               value: scaleMediaQueryData,
-              activeColor: Colors.purple.shade300,
+              activeThumbColor: Colors.purple.shade300,
               onChanged: (bool value) {
                 setState(() {
                   scaleMediaQueryData = value;
@@ -70,7 +70,13 @@ class _ScaledMediaQueryDataDemoState extends State<ScaledMediaQueryDataDemo> {
           ),
           ListView(
             children: [
-              Offstage(child: TextField(focusNode: keyboardFocusNode)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                  focusNode: keyboardFocusNode,
+                  decoration: InputDecoration(labelText: "Type something..."),
+                ),
+              ),
               MediaQueryDataText(
                 widget.mediaQueryData,
                 title: "Scaled mediaQueryData",

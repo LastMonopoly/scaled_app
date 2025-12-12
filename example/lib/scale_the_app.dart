@@ -42,7 +42,7 @@ class _ScaledAppDemoState extends State<ScaledAppDemo> {
             padding: const EdgeInsets.only(right: 10),
             child: Switch(
               value: isScaling,
-              activeColor: Colors.purple.shade300,
+              activeThumbColor: Colors.purple.shade300,
               onChanged: (bool value) {
                 setState(() {
                   isScaling = value;
