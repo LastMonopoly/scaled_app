@@ -50,6 +50,14 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     return scaleFactor(physicalSize / devicePixelRatio);
   }
 
+  double get _safeDevicePixelRatio {
+    if (devicePixelRatioScaled == 0) {
+      final view = platformDispatcher.implicitView;
+      return view?.devicePixelRatio ?? 1.0;
+    }
+    return devicePixelRatioScaled;
+  }
+
   double devicePixelRatioScaled = 0;
 
   bool get isScaling => scale != 1.0;
@@ -121,9 +129,7 @@ class ScaledWidgetsFlutterBinding extends WidgetsFlutterBinding {
     try {
       _pendingPointerEvents.addAll(PointerEventConverter.expand(
         packet.data,
-        (viewId) {
-          return devicePixelRatioScaled;
-        },
+        (viewId) => _safeDevicePixelRatio,
       ));
       if (!locked) {
         _flushPointerEventQueue();
