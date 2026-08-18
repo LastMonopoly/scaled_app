@@ -30,6 +30,12 @@ After:
 
 ![Resized screenshots of the same design after scaling](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/screenshots/After_2.png "Resized screenshots after scaling")
 
+## Sponsor
+
+[![庞征博引 — 想学的，慢慢都会](https://raw.githubusercontent.com/LastMonopoly/scaled_app/master/sponsors/pangzhengboyin.png "庞征博引")](https://pangzhengboyin.com/?utm_source=pubdev&utm_medium=sponsorship&utm_campaign=flutter_packages&utm_content=scaled_app_readme_banner)
+
+This package is sponsored by [庞征博引](https://pangzhengboyin.com/?utm_source=pubdev&utm_medium=sponsorship&utm_campaign=flutter_packages&utm_content=scaled_app_readme_text), which breaks complex subjects into 5–10 minute reads you work through, and ask questions about, at your own pace.
+
 ## Live demo
 
 https://lastmonopoly.github.io/flutter_web_app/scaled_app_demo/
