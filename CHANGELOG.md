@@ -1,3 +1,8 @@
+## 2.3.2
+
+- Add a sponsor section to the README
+- Add `repository`, `issue_tracker` and `topics` to `pubspec.yaml`
+
 ## 2.3.1
 
 - Update Dart SDK constraint to >=3.2.0
